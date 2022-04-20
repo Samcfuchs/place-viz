@@ -1,41 +1,63 @@
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+import glob
+from tqdm import tqdm
+import pickle
+from matplotlib.colors import rgb2hex
+from datetime import datetime as dt
+
+
+def rgba_to_hex_mat(mat):
+    flat = mat.reshape(-1,4)
+    flat_hex = np.array([rgb2hex(flat[i,:]) for i in range(flat.shape[0])])
+    return flat_hex.reshape(mat.shape[0],mat.shape[1])
+
+def tohex(array):
+    array = np.asarray(array*255, dtype='uint32')
+    return ((array[:, :, 0]<<16) + (array[:, :, 1]<<8) + array[:, :, 2])
+
+def rgbtoint(color):
+    color = (color*255).astype(int)
+    return (color[0]<<16) + (color[1]<<8) + color[2]
+
 
 def gen_color_map():
+    """
+    Uses an arbitrary image to construct a map from unique color values to
+    integer indices in the range [0-31]. By passing this map to the image
+    parser, we can ensure that those indices are used consistently across
+    different images.
+
+    Returns a dictionary mapping {integer representation of hex code -> integer
+    index}
+    """
+
     # This is an arbitrary file, but don't change it--our colormap needs to be consistent
-    #file = "data/img_2022/images_single/0-1648901427.png"
-    # I think they added new colors at some point in the experiment? There are
-    # 32 colors at the end (that's 5 bits)
     file = "data/img_2022/images_quadro/0/0-1649071837.png"
 
     im = plt.imread(file)
     colors = np.unique(im.reshape(-1,4), axis=0)
+    #colors_hex = list(map(rgb2hex, colors))
+    colors_hex = list(map(rgbtoint, colors))
 
-    # I don't know how this sort function works but it should make this function
-    # invariant to which particular file we use
-    #colors.sort(axis=0)
+    color_map = {color:index for index,color in enumerate(colors_hex)}
 
-    return colors
+    return color_map
 
-def parse_image(fn, colors=gen_color_map()):
-    im = plt.imread(fn)
 
-    false_colors, false_ind = np.unique(im.reshape(-1,4), axis=0, return_inverse=True)
-    assert (false_colors == colors).all()
+""" This is the function that needs to be optimized """
+def parse_image(filename, colors=gen_color_map()):
 
-    #false_color_dict = {k:i for i,k in enumerate(colors)}
-    #print(false_color_dict)
+    im = plt.imread(filename)
 
-    #view_color_map(false_colors)
+    #im_hex = rgba_to_hex_mat(im)
+    im_hex = tohex(im)
 
-    #ind = np.vectorize(color_dict.__getitem__)(im)
-    #colors_int = (colors * 255).astype(int)
-    #im_int = (im * 255).astype(int)
-    #print(colors_int)
-    #ind = colors_int[im_int]
-    
-    return false_ind.reshape((im.shape[0],im.shape[1]))
+    indices = np.vectorize(colors.__getitem__)(im_hex)
+
+    return indices.reshape((im.shape[0],im.shape[1]))
+
 
 def view_color_map(cmap):
     print("Unique Colors:", len(cmap))
@@ -43,11 +65,34 @@ def view_color_map(cmap):
     plt.imshow(cmap.reshape((4,8,4)))
     plt.show()
 
-colors = gen_color_map()
 
-view_color_map(colors)
+def parse_in_folder(folder_path, colors=gen_color_map()):
+    paths = glob.glob(folder_path)
+    print("Images found:", len(paths))
+    
+    mats = {}
 
-file = "data/img_2022/images_quadro/1/1-1649059774.png"
-ind = parse_image(file, colors)
-print(ind)
+    for p in tqdm(paths):
+        mat = parse_image(p, colors)
+        mats[p] = mat
+    
+    return mats
+
+if __name__ == "__main__":
+    color_map = gen_color_map()
+
+    # Get the time to parse one image
+    file = "data/img_2022/images_quadro/1/1-1649059774.png"
+    start = dt.now()
+    ind = parse_image(file, color_map)
+    print(ind)
+    print("Time (s):", dt.now() - start)
+
+    #sys.exit()
+
+    # Parse all the images from 
+    mats = parse_in_folder("data/img_2022/images_*/*.png")
+
+    with open("file.p", 'wb') as f:
+        pickle.dump(mats, f)
 

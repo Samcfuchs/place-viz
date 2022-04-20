@@ -1,3 +1,10 @@
-data/data.zip
+# Original data files (they're way too big)
+data/img_2022/data.zip
 data/img_2022/images_*/*/*.png
 data/img_2022/images_*/*.png
+
+# Pickle files
+*.p
+
+# Python stuff
+__pycache__/
