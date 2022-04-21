@@ -29,7 +29,7 @@ live under that directory.
 ## Pre-processing
 
 The full canvas data totals 5 GB in size, in part because the images are
-uncompressed in the 24-bit color space. Because there are only 32 colors
+uncompressed in the 32-bit color space. Because there are only 32 colors
 available for users to place, we should be able to downscale this to a 5-bit
 color space, which will cut memory usage by a factor of 6 and make our data
 easier to store and manipulate. Our first step should be to take this
@@ -39,5 +39,23 @@ values.
 - [x] Pull image data into python (can use matplotlib or similar)
 - [x] Identify unique colors in images
 - [x] Create a dictionary to index these colors to 5-bit numbers
-- [ ] Translate images into 5-bit color identifiers
+- [x] Translate images into 5-bit color identifiers
 - [ ] Store 5-bit matrices in a static file type
+
+### Apr 20 Discussion
+
+- Parse coordinate references out of reddit comments
+    - Attach these to the main viz
+- Heatmap of activity in different areas over time
+- Use Gaussian pyramid to look for patterns at different scales
+- Tightly couple all of these so that state is easy to track
+
+## Tasks
+
+### Preprocessing
+- [ ] Build pixel change map (Massimo)
+- [ ] Store compressed matrices in some format (Sam)
+
+### Visualization
+- [ ] Reverse preprocessing
+- [ ] Build framework for main place viz (Julia)
