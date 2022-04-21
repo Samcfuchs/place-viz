@@ -6,7 +6,7 @@ from tqdm import tqdm
 import pickle
 from matplotlib.colors import rgb2hex
 from datetime import datetime as dt
-
+import gc
 
 def rgba_to_hex_mat(mat):
     flat = mat.reshape(-1,4)
@@ -67,16 +67,21 @@ def view_color_map(cmap):
 
 
 def parse_in_folder(folder_path, colors=gen_color_map()):
-    paths = glob.glob(folder_path)
-    print("Images found:", len(paths))
-    
-    mats = {}
 
-    for p in tqdm(paths):
-        mat = parse_image(p, colors)
-        mats[p] = mat
+    paths = glob.glob(folder_path)
+    N = len(paths)
+    print("Images found:", N)
     
-    return mats
+    mat = np.zeros(shape=(len(paths),1000,1000), dtype=np.int8)
+
+    for i in tqdm(range(N)):
+        mat[i] = parse_image(paths[i], colors)
+
+        # Clear out the memory leaks
+        if i % 100 == 0:
+            gc.collect()
+    
+    return mat
 
 if __name__ == "__main__":
     color_map = gen_color_map()
