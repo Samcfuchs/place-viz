@@ -96,8 +96,8 @@ if __name__ == "__main__":
     #sys.exit()
 
     # Parse all the images from 
-    mats = parse_in_folder("data/img_2022/images_*/*.png")
-
-    with open("file.p", 'wb') as f:
+    # mats = parse_in_folder("data/img_2022/images_*/*.png")
+    mats = parse_in_folder("data/img_2022/test/image_*/*.png")
+    with open("test.p", 'wb') as f:
         pickle.dump(mats, f)
 

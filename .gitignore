@@ -8,3 +8,6 @@ data/img_2022/images_*/*.png
 
 # Python stuff
 __pycache__/
+
+# Test files
+test.csv
