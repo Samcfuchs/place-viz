@@ -3,133 +3,194 @@
 <title>r/place analysis</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<script src="https://d3js.org/d3.v6.min.js"></script> 
+<script src="https://d3js.org/d3.v6.min.js"></script>
 
 <link href='https://fonts.googleapis.com/css?family=IBM Plex Sans Condensed' rel='stylesheet'>
 
 
 <style type="text/css">
-  
-body, h1, h2, h3, h4, h5, h6 {
-  font-family: 'IBM Plex Sans Condensed';
-}
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'IBM Plex Sans Condensed';
+  }
 
-input[type="range"] {
-  width:800px;
-}
+  input[type="range"] {
+    width: 800px;
+  }
 
-.container{
-  display: flex;
-  justify-content: center;
-  /* flex-direction: column; */
-}
-.col{
-  flex-direction: column;
-}
-.center{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  .container {
+    display: flex;
+    justify-content: center;
+    /* flex-direction: column; */
+  }
 
-}
-button{
-  font-size: 10pt;
-  margin: 5px;
-}
-.buttons{
-  width: 1090px; 
-  /* must be width and margins of top svgs */
-}
+  .col {
+    flex-direction: column;
+  }
 
+  .center {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+  }
+
+  button {
+    font-size: 10pt;
+    margin: 5px;
+  }
+
+  .buttons {
+    width: 1090px;
+    /* must be width and margins of top svgs */
+  }
 </style>
+
 <body>
 
   <h1 class="center">r/place Analysis</h1>
 
-<div class="container col">
+  <div class="container col">
 
-<div class="center">
-  <div class="w3-bar w3-left buttons" style="margin-top: 10px;">
-    <button class="w3-bar-item w3-button w3-border w3-round-large">change heatmap</button>
-    <button class="w3-bar-item w3-button w3-border w3-round-large">greyscale + heatmap</button>
-    <button class="w3-bar-item w3-button w3-border w3-round-large">r/place</button>
-  </div>
-  <div class="center">
-    
-  <svg id="heatmap" height="375" width="800" class="w3-panel w3-border w3-round-xlarge" style=" display: inline-block;"></svg>
-  <svg id="description" height="375" width="250" class="w3-panel w3-border w3-round-xlarge" style="margin-left: 40px;  display: inline-block;"></svg>
-  <svg id="timeline" height="75" width="800" class="w3-panel w3-border w3-round-xlarge" style="margin-left: 40px; margin-top: 5px;"></svg>
-  <div class="slidecontainer">
-    <input type="range" min="1" max="100" value="50" style="margin-left: 40px">
-  </div>  
-</div>
-  
+    <div class="center">
+      <!-- <div class="w3-bar w3-left buttons" style="margin-top: 10px;">
+        <button class="w3-bar-item w3-button w3-border w3-round-large">change heatmap</button>
+        <button class="w3-bar-item w3-button w3-border w3-round-large">greyscale + heatmap</button>
+        <button class="w3-bar-item w3-button w3-border w3-round-large">r/place</button>
+      </div>
+      <div class="center">
 
-  <div class="lineplots center">
-    <svg id="worldplot" height="200" width="800" class="w3-panel w3-border w3-round-xlarge" style="margin-left: 40px;  display: inline-block;">
-    </svg>
-    <svg id="keywordplot" height="200" width="800" class="w3-panel w3-border w3-round-xlarge" style="margin-left: 40px;  display: inline-block;">
-      <text x="400" y="100" text-anchor="middle" text-align="center">Please select a country to see nation-specific keyword trends</text>
-    </svg>
-  </div>
-</div>
-
-</div>
+        <svg id="heatmap" height="375" width="800" class="w3-panel w3-border w3-round-xlarge"
+          style=" display: inline-block;"></svg>
+        <svg id="description" height="375" width="250" class="w3-panel w3-border w3-round-xlarge"
+          style="margin-left: 40px;  display: inline-block;"></svg>
+        <svg id="timeline" height="75" width="800" class="w3-panel w3-border w3-round-xlarge"
+          style="margin-left: 40px; margin-top: 5px;"></svg>
+        <div class="slidecontainer">
+          <input type="range" min="1" max="100" value="50" style="margin-left: 40px">
+        </div>
+      </div>
 
 
-<script>
-        
-          // d3.csv("../heat.csv", d3.autoType )
-          // .then( (dataMap) => { 
-          // console.log('data', dataMap);
+      <div class="lineplots center">
+        <svg id="worldplot" height="200" width="800" class="w3-panel w3-border w3-round-xlarge"
+          style="margin-left: 40px;  display: inline-block;">
+        </svg>
+        <svg id="keywordplot" height="200" width="800" class="w3-panel w3-border w3-round-xlarge"
+          style="margin-left: 40px;  display: inline-block;">
+          <text x="400" y="100" text-anchor="middle" text-align="center">Please select a country to see nation-specific
+            keyword trends</text>
+        </svg>
+      </div>
+    </div> -->
 
-          // dataMap.forEach( d => {
-          //     // We noticed that there were commas and $ which broke the type coercion from string to number
-          //     d['x'] *= 5;
-          //     d['y'] *= 5;
-          //     d['width'] *= 5;
-          //     d['height'] *= 5;
-              
-          //   });
+      <div id="visualization">
 
-          // const svg = d3.select("svg#heatmap");
+      </div>
 
-
-          // const colorExtent = d3.extent(dataMap, d => d['log_attempt'] );
-          // const colorScale = d3.scaleSequential(d3.interpolateInferno).domain(colorExtent);
-
-          //   dataMap.forEach( (d, i) => {
-
-        //       svg.append("rect")
-        //             .attr("x", d['x'])
-        //         .attr("y", d['y'])
-        //         .attr("height", d['height'])
-        //         .attr("width", d['width'])
-        //         .style("fill", colorScale(d['log_attempt']));
-
-        // });
-            
+    </div>
 
 
+    <script>
+
+      /**
+       *  Data should be given in a 2d array with the value being the
+       *  number of changes for for a pixel at (row, col)
+       **/
+      function heatmap(data) {
+        let pixelSize = 10;
+
+        let width = data[0].length * pixelSize;
+        let height = data.length * pixelSize;
+
+        let data1D = []
+        data.forEach((row, i) => {
+          row.forEach((val, j) => {
+            data1D.push({
+              'x': j,
+              'y': i % width,
+              'value': val
+            })
+          })
+        })
+
+        //
+        calc1D = data.flat()
+        let min = d3.min(calc1D)
+        let max = d3.max(calc1D)
+
+        //make the colorscale for explanation heat map
+        var heatmap_color = d3.scaleSequential()
+          .interpolator(d3.interpolateViridis)
+          .domain([min, max])
+
+        var canvas = d3.select('#visualization')
+          .append('canvas')
+          .attr('width', width)
+          .attr('height', height)
+          .attr("class", "canvas_pos")
+          .attr("id", "heatmap");
+
+        var context = canvas.node().getContext('2d');
+
+        // create a parent for all the elements
+        var changes = document.createElement('changes');
+        var heatmap = d3.select(changes);
+
+        //bind the data to canvas elements
+        heatmap.selectAll('changes.rect')
+          .data(data1D)
+          .enter()
+          .append('changes')
+          .attr('class', 'rect')
+          .attr("height", pixelSize)
+          .attr("width", pixelSize)
+          .attr("x", cell => { return cell.x * pixelSize })
+          .attr("y", cell => { return cell.y * pixelSize })
+          .attr("fillStyle", cell => {
+            let color = d3.color(heatmap_color(cell.value))
+            color.opacity = 0.5;
+            return color + "";
+          })
+
+        context.clearRect(0, 0, width, height);
+
+        heatmap.selectAll('changes.rect')
+          .each(function (d, i) {
+            var node = d3.select(this);
+            context.beginPath();
+            context.rect(node.attr('x'),
+              node.attr('y'),
+              node.attr('width'),
+              node.attr('height'));
+            context.fillStyle = node.attr('fillStyle');
+            context.fill();
+          })
+      }
 
 
 
+      let testData = [
+        [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4],
+        [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4],
+        [4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4],
+        [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4],
+        [4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4],
+        [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4],
+        [4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1, 4, 3, 2, 1],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+      ];
 
+      heatmap(testData);
 
-
-
-
-
-
-
-
-
-
-
-
-          // console.log(dataMap);
-        // }, (error) => { console.log('error', error); } )
-        
-      </script>
+    </script>
 </body>
+
 </html>
