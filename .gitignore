@@ -11,3 +11,5 @@ __pycache__/
 
 # Test files
 test.csv
+*.csv
+.vscode
