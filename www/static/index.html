@@ -89,21 +89,23 @@
       </div>
     </div> -->
 
-      <div id="visualization">
-
-      </div>
-
     </div>
+
+
+    <div id="testHeat1"></div>
+    <div id="testHeat2"></div>
 
 
     <script>
 
       /**
        *  Data should be given in a 2d array with the value being the
-       *  number of changes for for a pixel at (row, col)
+       *  number of changes for for a pixel at (row, col).
+       *  DivId should be the id for the div that the heatmap will be
+       *  nested inside.
+       *  PixelSize should be the size of each pixel in the heatmap.
        **/
-      function heatmap(data) {
-        let pixelSize = 10;
+      function heatmap(data, divId, pixelSize) {
 
         let width = data[0].length * pixelSize;
         let height = data.length * pixelSize;
@@ -129,7 +131,7 @@
           .interpolator(d3.interpolateViridis)
           .domain([min, max])
 
-        var canvas = d3.select('#visualization')
+        var canvas = d3.select(divId)
           .append('canvas')
           .attr('width', width)
           .attr('height', height)
@@ -188,7 +190,8 @@
         [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
       ];
 
-      heatmap(testData);
+      heatmap(testData, '#testHeat1', 10);
+      heatmap(testData, '#testHeat2', 5);
 
     </script>
 </body>
