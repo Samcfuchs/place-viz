@@ -97,7 +97,8 @@ if __name__ == "__main__":
 
     # Parse all the images from 
     # mats = parse_in_folder("data/img_2022/images_*/*.png")
-    mats = parse_in_folder("data/img_2022/test/image_*/*.png")
-    with open("test.p", 'wb') as f:
-        pickle.dump(mats, f)
-
+    t = 2
+    for c in [0,1,2,3]:
+        mats = parse_in_folder(f"data/img_2022/images_quadro/{c}/*.png")
+        with open(f"t{t}-c{c}.p", 'wb') as f:
+            pickle.dump(mats, f)
