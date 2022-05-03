@@ -3,52 +3,16 @@
 <title>r/place analysis</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="style.css">
+
 <script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="keypoints.js"></script>
 
 <link href='https://fonts.googleapis.com/css?family=IBM Plex Sans Condensed' rel='stylesheet'>
 
 
 <style type="text/css">
-  body,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: 'IBM Plex Sans Condensed';
-  }
-
-  input[type="range"] {
-    width: 800px;
-  }
-
-  .container {
-    display: flex;
-    justify-content: center;
-    /* flex-direction: column; */
-  }
-
-  .col {
-    flex-direction: column;
-  }
-
-  .center {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-
-  }
-
-  button {
-    font-size: 10pt;
-    margin: 5px;
-  }
-
-  .buttons {
-    width: 1090px;
-    /* must be width and margins of top svgs */
-  }
+  
 </style>
 
 <body>
@@ -58,38 +22,49 @@
   <div class="container col">
 
     <div class="center">
-      <!-- <div class="w3-bar w3-left buttons" style="margin-top: 10px;">
-        <button class="w3-bar-item w3-button w3-border w3-round-large">change heatmap</button>
-        <button class="w3-bar-item w3-button w3-border w3-round-large">greyscale + heatmap</button>
-        <button class="w3-bar-item w3-button w3-border w3-round-large">r/place</button>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras.</p>
+      <div>
+        <svg id="expo1" width="900" height="300"></svg>
       </div>
-      <div class="center">
 
-        <svg id="heatmap" height="375" width="800" class="w3-panel w3-border w3-round-xlarge"
-          style=" display: inline-block;"></svg>
-        <svg id="description" height="375" width="250" class="w3-panel w3-border w3-round-xlarge"
-          style="margin-left: 40px;  display: inline-block;"></svg>
-        <svg id="timeline" height="75" width="800" class="w3-panel w3-border w3-round-xlarge"
-          style="margin-left: 40px; margin-top: 5px;"></svg>
-        <div class="slidecontainer">
-          <input type="range" min="1" max="100" value="50" style="margin-left: 40px">
+      <div class="sidebyside">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras.</p>
+        <div>
+          <svg id="expo2" width="400" height="300"></svg>
         </div>
       </div>
 
+    </div>
 
-      <div class="lineplots center">
-        <svg id="worldplot" height="200" width="800" class="w3-panel w3-border w3-round-xlarge"
-          style="margin-left: 40px;  display: inline-block;">
-        </svg>
-        <svg id="keywordplot" height="200" width="800" class="w3-panel w3-border w3-round-xlarge"
-          style="margin-left: 40px;  display: inline-block;">
-          <text x="400" y="100" text-anchor="middle" text-align="center">Please select a country to see nation-specific
-            keyword trends</text>
-        </svg>
+    <h2>Highlights</h2>
+    <div class="caseandnav">
+      <nav>
+        <ol>
+          <li><a>Canadian Flag</a></li>
+          <li><a>Canadian Flag</a></li>
+          <li><a>Canadian Flag</a></li>
+          <li><a>Canadian Flag</a></li>
+          <li><a>Canadian Flag</a></li>
+        </ol>
+      </nav>
+
+      <div id="keypoints" class="center">
+
+        <!-- gets populated with divs for each case -->
+        <!-- ex: -->
+  <!-- <div>
+          <h3></h3>
+          <p></p>
+          <svg></svg>
+          <p></p>
+        </div> -->
+  
+  
       </div>
-    </div> -->
 
     </div>
+
+   
 
 
     <div id="testHeat1"></div>
@@ -97,6 +72,15 @@
 
 
     <script>
+
+      addKeypoint(
+        title="Canadian Flag",
+        divname="canada",
+        svgname="canadianflagsvg",
+        paragraph1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras.",
+        paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
+      )
+
 
       /**
        *  Data should be given in a 2d array with the value being the
