@@ -149,12 +149,12 @@
 
         let data_reg = loessRegression(data)
 
-        let lineGen = d3.line()  
+        let lineGen = d3.line()
           .x(d => timeScale(d[0]))
           .y(d => countScale(d[1]))
           .curve(d3.curveMonotoneX)
 
-        let lineGen1 = d3.line()  
+        let lineGen1 = d3.line()
           .x(d => timeScale(d['min_from_zero']))
           .y(d => countScale(d['count']))
 
@@ -367,8 +367,12 @@
           d['posts'] = parseInt(d['posts']);
         })
         userData2017 = userData2017.filter(d => d['posts'] > 10);
+        let userData2022 = await d3.csv("../data/2022_user_data.csv");
+        userData2022.forEach(d => {
+          d['posts'] = parseInt(d['posts']);
+        })
+        userData2022 = userData2022.filter(d => d['posts'] > 10);
 
-        console.log(userData2017);
         histogram(userData2017, 'expo2');
 
         // TODO: replace testData with real data
