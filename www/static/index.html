@@ -84,7 +84,6 @@
     <script>
 
       async function tileschart(data, svgId) {
-        console.log(data);
 
         const svg = d3.select("#" + svgId);
         const margin = { top: 15, right: 15, bottom: 65, left: 80 };
@@ -98,7 +97,6 @@
         const countExtent = d3.extent(data, d => d['count']);
         const countScale = d3.scalePow().exponent(0.5).domain(countExtent).range([height, 0]);
         const timeExtent = d3.extent(data, d => d['min_from_zero']);
-        console.log(timeExtent)
         const timeScale = d3.scaleLinear().domain(timeExtent).range([0, width]);
 
         let leftAxis = d3.axisLeft(countScale);
@@ -270,7 +268,11 @@
 
       const requestData = async () => {
 
-        const tileData2017 = await d3.csv("../data/2017_timedata.csv");
+        let tileData2017 = await d3.csv("../data/2017_timedata.csv");
+        tileData2017.forEach(d => {
+          d['count'] = parseInt(d['count']);
+          d['min_from_zero'] = parseInt(d['min_from_zero']);
+        })
 
         tileschart(tileData2017, 'expo1');
 
