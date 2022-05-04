@@ -1,6 +1,3 @@
-let keypoints = document.getElementById("keypoints").innerHTML += "<div><svg></svg></div>"
-keypoints.innerHTML += "<div><svg></svg></div>"
-
 function addKeypoint(title, divname, heatmapname, paragraph1, paragraph2) {
     let html = document.getElementById("keypoints")
     html.innerHTML += "<div class='case' id='" + divname + "'></div>"
