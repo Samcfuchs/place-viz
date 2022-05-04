@@ -37,6 +37,11 @@
         <svg id="expo1" width="900" height="300"></svg>
       </div>
 
+      <div class="smallmults">
+        <svg id="expo2" width="425" height="300"></svg>
+        <svg id="expo3" width="425" height="300"></svg>
+      </div>
+
       <div class="sidebyside">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo
@@ -47,7 +52,7 @@
           fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed
           cras.</p>
         <div>
-          <svg id="expo2" width="400" height="300"></svg>
+          <svg id="expo4" width="400" height="300"></svg>
         </div>
       </div>
 
@@ -84,8 +89,99 @@
 
 
     <script>
+      const color_17 = '#9932a8'
+      const color_22 = '#439abf'
 
-      async function tileschart(data, svgId) {
+      async function tileschart(data, svgId, color) {
+
+      const svg = d3.select("#" + svgId);
+      const margin = { top: 15, right: 15, bottom: 65, left: 80 };
+      const width = svg.attr("width") - margin.left - margin.right;
+      const height = svg.attr("height") - margin.top - margin.bottom;
+
+      let annotations = svg.append("g").attr("id", svgId + "annotations");
+      let chart = svg.append("g").attr("id", svgId + "points")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      const countExtent = d3.extent(data, d => d['count']);
+      const countScale = d3.scaleLinear().domain(countExtent).range([height, 0]);
+      const timeExtent = d3.extent(data, d => d['min_from_zero']);
+      const timeScale = d3.scaleLinear().domain(timeExtent).range([0, width]);
+
+      let leftAxis = d3.axisLeft(countScale)
+      .tickFormat(function (d) {
+            if ((d / 1000) >= 1) {
+              d = d / 1000 + "K";
+            }
+            return d;
+          });
+      let leftGridlines = d3.axisLeft(countScale)
+        .tickSize(-width - 10)
+        .tickFormat('')
+      let bottomAxis = d3.axisBottom(timeScale)
+      let bottomGridlines = d3.axisBottom(timeScale)
+        .tickSize(-height - 10)
+        .tickFormat("");
+
+      annotations.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+        .call(leftAxis);
+      annotations.append("g")
+        .attr("class", "y gridlines")
+        .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+        .call(leftGridlines);
+      annotations.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("x", -height / 2)
+        .attr("y", 15)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("# of Changes");
+
+      annotations.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+        .call(bottomAxis);
+      annotations.append("g")
+        .attr("class", "x gridlines")
+        .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+        .call(bottomGridlines);
+      annotations.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", width / 2 + margin.left)
+        .attr("y", height + margin.bottom)
+        .text("Time");
+
+      loessRegression = d3.regressionLoess()
+        .x(d => d['min_from_zero'])
+        .y(d => d['count'])
+        .bandwidth(0.009);
+
+      let data_reg = loessRegression(data)
+
+      let lineGen = d3.line()
+        .x(d => timeScale(d[0]))
+        .y(d => countScale(d[1]))
+        .curve(d3.curveMonotoneX)
+
+      let lineGen1 = d3.line()
+        .x(d => timeScale(d['min_from_zero']))
+        .y(d => countScale(d['count']))
+
+      chart.append("path")
+        .datum(data_reg)
+        .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", color)
+        .attr("stroke-width", 1)
+        .attr("d", lineGen);
+
+      }
+
+      async function tileschartmultiple(data1, data2, svgId) {
 
         const svg = d3.select("#" + svgId);
         const margin = { top: 15, right: 15, bottom: 65, left: 80 };
@@ -96,12 +192,20 @@
         let chart = svg.append("g").attr("id", svgId + "points")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        const countExtent = d3.extent(data, d => d['count']);
+        const data = d3.merge([data1,data2])
+
+        const countExtent = d3.extent(data, d=> d['count']);
         const countScale = d3.scaleLinear().domain(countExtent).range([height, 0]);
-        const timeExtent = d3.extent(data, d => d['min_from_zero']);
+        const timeExtent = d3.extent(data, d=> d['min_from_zero']);
         const timeScale = d3.scaleLinear().domain(timeExtent).range([0, width]);
 
-        let leftAxis = d3.axisLeft(countScale);
+        let leftAxis = d3.axisLeft(countScale)
+        .tickFormat(function (d) {
+            if ((d / 1000) >= 1) {
+              d = d / 1000 + "K";
+            }
+            return d;
+          });;
         let leftGridlines = d3.axisLeft(countScale)
           .tickSize(-width - 10)
           .tickFormat("");
@@ -142,14 +246,14 @@
           .attr("y", height + margin.bottom)
           .text("Time");
 
-        loessRegression = d3.regressionLoess()
+        loessRegression1 = d3.regressionLoess()
           .x(d => d['min_from_zero'])
           .y(d => d['count'])
           .bandwidth(0.009);
 
-        let data_reg = loessRegression(data)
+        let data_reg1 = loessRegression1(data1)
 
-        let lineGen = d3.line()
+        let lineGenr1 = d3.line()  
           .x(d => timeScale(d[0]))
           .y(d => countScale(d[1]))
           .curve(d3.curveMonotoneX)
@@ -159,12 +263,37 @@
           .y(d => countScale(d['count']))
 
         chart.append("path")
-          .datum(data_reg)
+          .datum(data_reg1)
           .attr("class", "line")
           .attr("fill", "none")
-          .attr("stroke", "steelblue")
-          .attr("stroke-width", 1)
-          .attr("d", lineGen);
+          .attr("stroke", color_17)
+          .attr("stroke-width", 2)
+          .attr("d", lineGenr1);
+
+        loessRegression2 = d3.regressionLoess()
+          .x(d => d['min_from_zero'])
+          .y(d => d['count'])
+          .bandwidth(0.009);
+
+        let data_reg2 = loessRegression2(data2)
+
+        let lineGenr2 = d3.line()  
+          .x(d => timeScale(d[0]))
+          .y(d => countScale(d[1]))
+          .curve(d3.curveMonotoneX)
+
+        let lineGen2 = d3.line()  
+          .x(d => timeScale(d['min_from_zero']))
+          .y(d => countScale(d['count']))
+
+        console.log(data_reg2)
+        chart.append("path")
+          .datum(data_reg2)
+          .attr("class", "line")
+          .attr("fill", "none")
+          .attr("stroke", color_22)
+          .attr("stroke-width", 2)
+          .attr("d", lineGenr2);
 
       }
 
@@ -190,7 +319,7 @@
         let histogram = d3.histogram()
           .value(function (d) { return d['posts']; })
           .domain(postScale.domain())
-          .thresholds(postScale.ticks(50));
+          .thresholds(postScale.ticks(10));
 
         let bins = histogram(data);
 
@@ -364,13 +493,25 @@
           d['min_from_zero'] = parseInt(d['min_from_zero']);
         })
 
-        tileschart(tileData2017, 'expo1');
+        let tileData2022 = await d3.csv("../data/2022_time_data_all.csv");
+        tileData2022.forEach(d => {
+          d['count'] = parseInt(d['count']);
+          d['min_from_zero'] = parseInt(d['min_from_zero']);
+        })
+
+        tileschartmultiple(tileData2017, tileData2022, 'expo1');
+        tileschart(tileData2017, 'expo2', color_17);
+        tileschart(tileData2022, 'expo3', color_22);
 
         let userData2017 = await d3.csv("../data/2017_user_data.csv");
 
         let userData2022 = await d3.csv("../data/2022_user_data.csv");
 
+<<<<<<< HEAD
         histogramMultiple(userData2017, userData2022, 'expo2');
+=======
+        histogram(userData2017, 'expo4');
+>>>>>>> 9108727896d8d16aaac32c0fe3ab2ddd11ddad9d
 
         // TODO: replace testData with real data
         const canadianflagData = await d3.text("../data/test1.csv");

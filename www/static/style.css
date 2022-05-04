@@ -38,9 +38,10 @@ button {
 }
 
 svg {
-  border: 1px solid green;
+  border: 1px solid rgb(64, 64, 64);
   margin: auto 10px;
   display: block;
+  border-radius: 10px;
 }
 
 .buttons {
@@ -143,9 +144,15 @@ canvas {
 }
 
 .gridlines line {
-  stroke: #bbb;
+  stroke: rgb(180, 180, 180);
+  stroke-width: 0.5px;
 }
 
 .gridlines .domain {
   stroke: none;
+}
+
+.smallmults{
+  display: flex;
+  flex-direction: row;
 }
