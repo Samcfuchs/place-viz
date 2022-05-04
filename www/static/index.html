@@ -164,9 +164,58 @@
           .attr("class", "line")
           .attr("fill", "none")
           .attr("stroke", "steelblue")
-          .attr("stroke-width", 3)
+          .attr("stroke-width", 1)
           .attr("d", lineGen);
 
+      }
+
+      async function histogram(data, svgId) {
+
+        const svg = d3.select("#" + svgId);
+        const margin = { top: 10, right: 10, bottom: 50, left: 50 };
+        const width = svg.attr("width") - margin.left - margin.right;
+        const height = svg.attr("height") - margin.top - margin.bottom;
+
+        let annotations = svg.append("g").attr("id", svgId + "annotations");
+        let chart = svg.append("g").attr("id", svgId + "points")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        const userExtent = [0, 1000];
+        const userScale = d3.scaleLinear().domain(userExtent).range([height, 0]);
+        const postExtent = d3.extent(data, d => d['posts']);
+        const postScale = d3.scaleLinear().domain(postExtent).range([0, width]);
+
+        let bin = d3.bin().domain(postScale.domain()).value(d => d['posts']).thresholds(postScale.ticks());
+        let bins = bin(data);
+
+        const countMax = d3.max(bins, d => d.length);
+        userScale.domain([0, countMax]);
+
+        let leftAxis = d3.axisLeft(userScale)
+        let leftGridlines = d3.axisLeft(userScale)
+          .tickSize(-width - 10)
+          .tickFormat("")
+        let bottomAxis = d3.axisBottom(postScale)
+        let bottomGridlines = d3.axisBottom(postScale)
+          .tickSize(-height - 10)
+          .tickFormat("")
+
+        annotations.append("g")
+          .attr("class", "y axis")
+          .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+          .call(leftAxis)
+        annotations.append("g")
+          .attr("class", "y gridlines")
+          .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+          .call(leftGridlines);
+        annotations.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+          .call(bottomAxis);
+        annotations.append("g")
+          .attr("class", "x gridlines")
+          .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+          .call(bottomGridlines);
       }
 
 
@@ -281,13 +330,21 @@
 
       const requestData = async () => {
 
-        let tileData2017 = await d3.csv("../data/2017_timedata.csv");
+        let tileData2017 = await d3.csv("../data/2017_time_data.csv");
         tileData2017.forEach(d => {
           d['count'] = parseInt(d['count']);
           d['min_from_zero'] = parseInt(d['min_from_zero']);
         })
 
         tileschart(tileData2017, 'expo1');
+
+        let userData2017 = await d3.csv("../data/2017_user_data.csv");
+        userData2017.forEach(d => {
+          d['posts'] = parseInt(d['posts']);
+        })
+
+        console.log(userData2017);
+        histogram(userData2017, 'expo2');
 
         // TODO: replace testData with real data
         const canadianflagData = await d3.text("../data/test1.csv");
