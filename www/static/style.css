@@ -141,3 +141,11 @@ li::marker {
 canvas {
   border: 1px solid black;
 }
+
+.gridlines line {
+  stroke: #bbb;
+}
+
+.gridlines .domain {
+  stroke: none;
+}
