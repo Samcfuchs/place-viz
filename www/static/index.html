@@ -38,44 +38,45 @@
       </div>
 
       <div class="smallmults">
-        <svg id="expo2" width="425" height="300"></svg>
-        <svg id="expo3" width="425" height="300"></svg>
+        <svg id="expo2" width="440" height="300"></svg>
+        <svg id="expo3" width="440" height="300"></svg>
       </div>
 
-      <div class="sidebyside">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo
-          viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus
-          ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet
-          non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at
-          consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas
-          fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed
-          cras.</p>
-        <div>
-          <svg id="expo4" width="400" height="300"></svg>
-        </div>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo
+        viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus
+        ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet
+        non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at
+        consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas
+        fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed
+        cras.</p>
+      <div class="smallmults">
+        <svg id="expo4" width="440" height="300"></svg>
+        <svg id="expo5" width="440" height="300"></svg>
       </div>
 
     </div>
 
+  </div>
 
-    <div class="caseandnav">
-      <nav class="nav">
-        <h2>Highlights</h2>
-        <ol>
-          <li><a href="#canada-h">Canadian Flag</a></li>
-          <li><a href="#france-h">France</a></li>
-          <li><a>The Purple Void</a></li>
-          <li><a>Kirby's Teeth</a></li>
-          <li><a>Rainbow Road</a></li>
-        </ol>
-      </nav>
 
-      <div id="keypoints" class="center">
+  <div class="caseandnav">
+    <nav class="nav">
+      <h2>Highlights</h2>
+      <ol>
+        <li><a href="#canada-h">Canadian Flag</a></li>
+        <li><a href="#france-h">France</a></li>
+        <li><a>The Purple Void</a></li>
+        <li><a>Kirby's Teeth</a></li>
+        <li><a>Rainbow Road</a></li>
+      </ol>
+    </nav>
 
-        <!-- gets populated with divs for each case -->
-        <!-- ex: -->
-        <!-- <div>
+    <div id="keypoints" class="center">
+
+      <!-- gets populated with divs for each case -->
+      <!-- ex: -->
+      <!-- <div>
           <h3></h3>
           <p></p>
           <svg></svg>
@@ -83,449 +84,442 @@
         </div> -->
 
 
-      </div>
-
     </div>
 
-
-    <script>
-      const color_17 = '#9932a8'
-      const color_22 = '#439abf'
-
-      async function tileschart(data, svgId, color) {
-
-        const svg = d3.select("#" + svgId);
-        const margin = { top: 15, right: 15, bottom: 65, left: 80 };
-        const width = svg.attr("width") - margin.left - margin.right;
-        const height = svg.attr("height") - margin.top - margin.bottom;
-
-        let annotations = svg.append("g").attr("id", svgId + "annotations");
-        let chart = svg.append("g").attr("id", svgId + "points")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        const countExtent = d3.extent(data, d => d['count']);
-        const countScale = d3.scaleLinear().domain(countExtent).range([height, 0]);
-        const timeExtent = d3.extent(data, d => d['min_from_zero']);
-        const timeScale = d3.scaleLinear().domain(timeExtent).range([0, width]);
-
-        let leftAxis = d3.axisLeft(countScale)
-          .tickFormat(function (d) {
-            if ((d / 1000) >= 1) {
-              d = d / 1000 + "K";
-            }
-            return d;
-          });
-        let leftGridlines = d3.axisLeft(countScale)
-          .tickSize(-width - 10)
-          .tickFormat('')
-        let bottomAxis = d3.axisBottom(timeScale)
-        let bottomGridlines = d3.axisBottom(timeScale)
-          .tickSize(-height - 10)
-          .tickFormat("");
-
-        annotations.append("g")
-          .attr("class", "y axis")
-          .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
-          .call(leftAxis);
-        annotations.append("g")
-          .attr("class", "y gridlines")
-          .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
-          .call(leftGridlines);
-        annotations.append("text")
-          .attr("class", "y label")
-          .attr("text-anchor", "end")
-          .attr("x", -height / 2)
-          .attr("y", 15)
-          .attr("dy", ".75em")
-          .attr("transform", "rotate(-90)")
-          .text("# of Changes");
-
-        annotations.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
-          .call(bottomAxis);
-        annotations.append("g")
-          .attr("class", "x gridlines")
-          .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
-          .call(bottomGridlines);
-        annotations.append("text")
-          .attr("class", "x label")
-          .attr("text-anchor", "end")
-          .attr("x", width / 2 + margin.left)
-          .attr("y", height + margin.bottom)
-          .text("Time");
-
-        loessRegression = d3.regressionLoess()
-          .x(d => d['min_from_zero'])
-          .y(d => d['count'])
-          .bandwidth(0.009);
-
-        let data_reg = loessRegression(data)
-
-        let lineGen = d3.line()
-          .x(d => timeScale(d[0]))
-          .y(d => countScale(d[1]))
-          .curve(d3.curveMonotoneX)
-
-        let lineGen1 = d3.line()
-          .x(d => timeScale(d['min_from_zero']))
-          .y(d => countScale(d['count']))
-
-        chart.append("path")
-          .datum(data_reg)
-          .attr("class", "line")
-          .attr("fill", "none")
-          .attr("stroke", color)
-          .attr("stroke-width", 1)
-          .attr("d", lineGen);
-
-      }
-
-      async function tileschartmultiple(data1, data2, svgId) {
-
-        const svg = d3.select("#" + svgId);
-        const margin = { top: 15, right: 15, bottom: 65, left: 80 };
-        const width = svg.attr("width") - margin.left - margin.right;
-        const height = svg.attr("height") - margin.top - margin.bottom;
-
-        let annotations = svg.append("g").attr("id", svgId + "annotations");
-        let chart = svg.append("g").attr("id", svgId + "points")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        const data = d3.merge([data1, data2])
-
-        const countExtent = d3.extent(data, d => d['count']);
-        const countScale = d3.scaleLinear().domain(countExtent).range([height, 0]);
-        const timeExtent = d3.extent(data, d => d['min_from_zero']);
-        const timeScale = d3.scaleLinear().domain(timeExtent).range([0, width]);
-
-        let leftAxis = d3.axisLeft(countScale)
-          .tickFormat(function (d) {
-            if ((d / 1000) >= 1) {
-              d = d / 1000 + "K";
-            }
-            return d;
-          });;
-        let leftGridlines = d3.axisLeft(countScale)
-          .tickSize(-width - 10)
-          .tickFormat("");
-        let bottomAxis = d3.axisBottom(timeScale)
-        let bottomGridlines = d3.axisBottom(timeScale)
-          .tickSize(-height - 10)
-          .tickFormat("");
-
-        annotations.append("g")
-          .attr("class", "y axis")
-          .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
-          .call(leftAxis);
-        annotations.append("g")
-          .attr("class", "y gridlines")
-          .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
-          .call(leftGridlines);
-        annotations.append("text")
-          .attr("class", "y label")
-          .attr("text-anchor", "end")
-          .attr("x", -height / 2)
-          .attr("y", 15)
-          .attr("dy", ".75em")
-          .attr("transform", "rotate(-90)")
-          .text("# of Changes");
-
-        annotations.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
-          .call(bottomAxis);
-        annotations.append("g")
-          .attr("class", "x gridlines")
-          .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
-          .call(bottomGridlines);
-        annotations.append("text")
-          .attr("class", "x label")
-          .attr("text-anchor", "end")
-          .attr("x", width / 2 + margin.left)
-          .attr("y", height + margin.bottom)
-          .text("Time");
-
-        loessRegression1 = d3.regressionLoess()
-          .x(d => d['min_from_zero'])
-          .y(d => d['count'])
-          .bandwidth(0.009);
-
-        let data_reg1 = loessRegression1(data1)
-
-        let lineGenr1 = d3.line()
-          .x(d => timeScale(d[0]))
-          .y(d => countScale(d[1]))
-          .curve(d3.curveMonotoneX)
-
-        let lineGen1 = d3.line()
-          .x(d => timeScale(d['min_from_zero']))
-          .y(d => countScale(d['count']))
-
-        chart.append("path")
-          .datum(data_reg1)
-          .attr("class", "line")
-          .attr("fill", "none")
-          .attr("stroke", color_17)
-          .attr("stroke-width", 2)
-          .attr("d", lineGenr1);
-
-        loessRegression2 = d3.regressionLoess()
-          .x(d => d['min_from_zero'])
-          .y(d => d['count'])
-          .bandwidth(0.009);
-
-        let data_reg2 = loessRegression2(data2)
-
-        let lineGenr2 = d3.line()
-          .x(d => timeScale(d[0]))
-          .y(d => countScale(d[1]))
-          .curve(d3.curveMonotoneX)
-
-        let lineGen2 = d3.line()
-          .x(d => timeScale(d['min_from_zero']))
-          .y(d => countScale(d['count']))
-
-        console.log(data_reg2)
-        chart.append("path")
-          .datum(data_reg2)
-          .attr("class", "line")
-          .attr("fill", "none")
-          .attr("stroke", color_22)
-          .attr("stroke-width", 2)
-          .attr("d", lineGenr2);
-
-      }
-
-      async function histogram(data, color, svgId) {
-
-        data.forEach(d => {
-          d['posts'] = parseInt(d['posts']);
-        })
-        data = data.filter(d => d['posts'] > 10);
-
-        const svg = d3.select("#" + svgId);
-        const margin = { top: 10, right: 10, bottom: 50, left: 50 };
-        const width = svg.attr("width") - margin.left - margin.right;
-        const height = svg.attr("height") - margin.top - margin.bottom;
-
-        let annotations = svg.append("g").attr("id", svgId + "annotations");
-        let chart = svg.append("g").attr("id", svgId + "points")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        const postExtent = d3.extent(data, d => d['posts']);
-        const postScale = d3.scaleLinear().domain(postExtent).range([0, width]);
-
-        let histogram = d3.histogram()
-          .value(function (d) { return d['posts']; })
-          .domain(postScale.domain())
-          .thresholds(postScale.ticks(10));
-
-        let bins = histogram(data);
-
-        const userExtent = [0, d3.max(bins, function (d) { return d.length; })];
-        const userScale = d3.scaleLinear().domain(userExtent).range([height, 0]);
-
-        let leftAxis = d3.axisLeft(userScale)
-          .tickFormat(function (d) {
-            if ((d / 1000) >= 1) {
-              d = d / 1000 + "K";
-            }
-            return d;
-          });
-        let leftGridlines = d3.axisLeft(userScale)
-          .tickSize(-width - 10)
-          .tickFormat("");
-        let bottomAxis = d3.axisBottom(postScale)
-        let bottomGridlines = d3.axisBottom(postScale)
-          .tickSize(-height - 10)
-          .tickFormat("")
-
-        annotations.append("g")
-          .attr("class", "y axis")
-          .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
-          .call(leftAxis);
-        annotations.append("g")
-          .attr("class", "y gridlines")
-          .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
-          .call(leftGridlines);
-        annotations.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
-          .call(bottomAxis)
-          .selectAll("text")
-          .attr("y", 0)
-          .attr("x", 10)
-          .attr("dy", ".35em")
-          .attr("transform", "rotate(90)")
-          .style("text-anchor", "start");
-        annotations.append("g")
-          .attr("class", "x gridlines")
-          .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
-          .call(bottomGridlines);
-
-        svg.selectAll("rect")
-          .data(bins)
-          .enter()
-          .append("rect")
-          .attr("x", 1)
-          .attr("transform", function (d) { return "translate(" + (margin.left + postScale(d.x0)) + "," + (margin.top + userScale(d.length)) + ")"; })
-          .attr("width", function (d) { return postScale(d.x1) - postScale(d.x0) - 1; })
-          .attr("height", function (d) { return height - userScale(d.length); })
-          .style("fill", color)
-      }
+  </div>
 
 
-      /**
-       *  Data should be given in a 2d array with the value being the
-       *  number of changes for for a pixel at (row, col).
-       *  DivId should be the id for the div that the heatmap will be
-       *  nested inside.
-       *  PixelSize should be the size of each pixel in the heatmap.
-       * 
-       *  Credit: Adapted from https://jeffrz.github.io/info4310-sp2022/notes/22.04.25.notes.htm
-       **/
-      async function heatmap(data, divId, pixelSize) {
+  <script>
+    const color_17 = '#9932a8'
+    const color_22 = '#439abf'
 
-        let width = data[0].length * pixelSize;
-        let height = data.length * pixelSize;
+    async function tileschart(data, svgId, color) {
 
-        let data1D = []
-        data.forEach((row, i) => {
-          row.forEach((val, j) => {
-            data1D.push({
-              'x': j,
-              'y': i % width,
-              'value': val
-            })
-          })
-        })
+      const svg = d3.select("#" + svgId);
+      const margin = { top: 15, right: 15, bottom: 65, left: 80 };
+      const width = svg.attr("width") - margin.left - margin.right;
+      const height = svg.attr("height") - margin.top - margin.bottom;
 
-        calc1D = data.flat()
-        let min = d3.min(calc1D)
-        let max = d3.max(calc1D)
+      let annotations = svg.append("g").attr("id", svgId + "annotations");
+      let chart = svg.append("g").attr("id", svgId + "points")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        //make the colorscale for explanation heat map
-        let heatmap_color = d3.scaleSequential()
-          .interpolator(d3.interpolateViridis)
-          .domain([min, max])
+      const countExtent = d3.extent(data, d => d['count']);
+      const countScale = d3.scaleLinear().domain(countExtent).range([height, 0]);
+      const timeExtent = d3.extent(data, d => d['min_from_zero']);
+      const timeScale = d3.scaleLinear().domain(timeExtent).range([0, width]);
 
-        let canvas = d3.select("#" + divId)
-          .append('canvas')
-          .attr('width', width)
-          .attr('height', height)
-          .attr('id', divId + 'canvas')
-
-        let context = canvas.node().getContext('2d');
-
-        // create a parent for all the elements
-        let changes = document.createElement('changes');
-        let heatmap = d3.select(changes);
-
-        //bind the data to canvas elements
-        heatmap.selectAll('changes.rect')
-          .data(data1D)
-          .enter()
-          .append('changes')
-          .attr('class', 'rect')
-          .attr("height", pixelSize)
-          .attr("width", pixelSize)
-          .attr("x", cell => { return cell.x * pixelSize })
-          .attr("y", cell => { return cell.y * pixelSize })
-          .attr("fillStyle", cell => {
-            let color = d3.color(heatmap_color(cell.value))
-            color.opacity = 0.5;
-            return color + "";
-          })
-
-        context.clearRect(0, 0, width, height);
-
-        heatmap.selectAll('changes.rect')
-          .each(function (d, i) {
-            let node = d3.select(this);
-            context.beginPath();
-            context.rect(node.attr('x'),
-              node.attr('y'),
-              node.attr('width'),
-              node.attr('height'));
-            context.fillStyle = node.attr('fillStyle');
-            context.fill();
-          })
-      }
-
-      /**
-       * When adding a key point, make sure to also call:
-       *      heatmap(<data>, <heatmapname>, <pixelSize>);
-       * in the requestData() function. 
-       * <heatmapname> should match the heatmapname for the new key point.
-       * TODO: Add 3 more key points.
-       **/
-      addKeypoint(
-        title = "Canadian Flag",
-        divname = "canada",
-        heatmapname = "canadianflag",
-        paragraph1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras.",
-        paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
-      )
-
-      addKeypoint(
-        title = "French Flag",
-        divname = "france",
-        heatmapname = "frenchflag",
-        paragraph1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras.",
-        paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
-      )
-
-
-
-      function csvToArray(csv) {
-        rows = csv.split("\n");
-        return rows.map(function (row) {
-          return row.split(",");
+      let leftAxis = d3.axisLeft(countScale)
+        .tickFormat(function (d) {
+          if ((d / 1000) >= 1) {
+            d = d / 1000 + "K";
+          }
+          return d;
         });
-      };
+      let leftGridlines = d3.axisLeft(countScale)
+        .tickSize(-width - 10)
+        .tickFormat('')
+      let bottomAxis = d3.axisBottom(timeScale)
+      let bottomGridlines = d3.axisBottom(timeScale)
+        .tickSize(-height - 10)
+        .tickFormat("");
 
-      const requestData = async () => {
+      annotations.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+        .call(leftAxis);
+      annotations.append("g")
+        .attr("class", "y gridlines")
+        .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+        .call(leftGridlines);
+      annotations.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("x", -height / 2)
+        .attr("y", 15)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("# of Changes");
 
-        let tileData2017 = await d3.csv("../data/2017_time_data.csv");
-        tileData2017.forEach(d => {
-          d['count'] = parseInt(d['count']);
-          d['min_from_zero'] = parseInt(d['min_from_zero']);
+      annotations.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+        .call(bottomAxis);
+      annotations.append("g")
+        .attr("class", "x gridlines")
+        .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+        .call(bottomGridlines);
+      annotations.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", width / 2 + margin.left)
+        .attr("y", height + margin.bottom)
+        .text("Time");
+
+      loessRegression = d3.regressionLoess()
+        .x(d => d['min_from_zero'])
+        .y(d => d['count'])
+        .bandwidth(0.009);
+
+      let data_reg = loessRegression(data)
+
+      let lineGen = d3.line()
+        .x(d => timeScale(d[0]))
+        .y(d => countScale(d[1]))
+        .curve(d3.curveMonotoneX)
+
+      let lineGen1 = d3.line()
+        .x(d => timeScale(d['min_from_zero']))
+        .y(d => countScale(d['count']))
+
+      chart.append("path")
+        .datum(data_reg)
+        .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", color)
+        .attr("stroke-width", 1)
+        .attr("d", lineGen);
+
+    }
+
+    async function tileschartmultiple(data1, data2, svgId, color1, color2) {
+
+      const svg = d3.select("#" + svgId);
+      const margin = { top: 15, right: 15, bottom: 65, left: 80 };
+      const width = svg.attr("width") - margin.left - margin.right;
+      const height = svg.attr("height") - margin.top - margin.bottom;
+
+      let annotations = svg.append("g").attr("id", svgId + "annotations");
+      let chart = svg.append("g").attr("id", svgId + "points")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      const data = d3.merge([data1, data2])
+
+      const countExtent = d3.extent(data, d => d['count']);
+      const countScale = d3.scaleLinear().domain(countExtent).range([height, 0]);
+      const timeExtent = d3.extent(data, d => d['min_from_zero']);
+      const timeScale = d3.scaleLinear().domain(timeExtent).range([0, width]);
+
+      let leftAxis = d3.axisLeft(countScale)
+        .tickFormat(function (d) {
+          if ((d / 1000) >= 1) {
+            d = d / 1000 + "K";
+          }
+          return d;
+        });;
+      let leftGridlines = d3.axisLeft(countScale)
+        .tickSize(-width - 10)
+        .tickFormat("");
+      let bottomAxis = d3.axisBottom(timeScale)
+      let bottomGridlines = d3.axisBottom(timeScale)
+        .tickSize(-height - 10)
+        .tickFormat("");
+
+      annotations.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+        .call(leftAxis);
+      annotations.append("g")
+        .attr("class", "y gridlines")
+        .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+        .call(leftGridlines);
+      annotations.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("x", -height / 2)
+        .attr("y", 15)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("# of Changes");
+
+      annotations.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+        .call(bottomAxis);
+      annotations.append("g")
+        .attr("class", "x gridlines")
+        .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+        .call(bottomGridlines);
+      annotations.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", width / 2 + margin.left)
+        .attr("y", height + margin.bottom)
+        .text("Time");
+
+      loessRegression1 = d3.regressionLoess()
+        .x(d => d['min_from_zero'])
+        .y(d => d['count'])
+        .bandwidth(0.009);
+
+      let data_reg1 = loessRegression1(data1)
+
+      let lineGenr1 = d3.line()
+        .x(d => timeScale(d[0]))
+        .y(d => countScale(d[1]))
+        .curve(d3.curveMonotoneX)
+
+      let lineGen1 = d3.line()
+        .x(d => timeScale(d['min_from_zero']))
+        .y(d => countScale(d['count']))
+
+      chart.append("path")
+        .datum(data_reg1)
+        .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", color1)
+        .attr("stroke-width", 2)
+        .attr("d", lineGenr1);
+
+      loessRegression2 = d3.regressionLoess()
+        .x(d => d['min_from_zero'])
+        .y(d => d['count'])
+        .bandwidth(0.009);
+
+      let data_reg2 = loessRegression2(data2)
+
+      let lineGenr2 = d3.line()
+        .x(d => timeScale(d[0]))
+        .y(d => countScale(d[1]))
+        .curve(d3.curveMonotoneX)
+
+      let lineGen2 = d3.line()
+        .x(d => timeScale(d['min_from_zero']))
+        .y(d => countScale(d['count']))
+
+      chart.append("path")
+        .datum(data_reg2)
+        .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", color2)
+        .attr("stroke-width", 2)
+        .attr("d", lineGenr2);
+
+    }
+
+    async function histogram(data, svgId, color) {
+
+      data.forEach(d => {
+        d['posts'] = parseInt(d['posts']);
+      })
+      data = data.filter(d => d['posts'] < 100);
+
+      const svg = d3.select("#" + svgId);
+      const margin = { top: 10, right: 10, bottom: 50, left: 50 };
+      const width = svg.attr("width") - margin.left - margin.right;
+      const height = svg.attr("height") - margin.top - margin.bottom;
+
+      let annotations = svg.append("g").attr("id", svgId + "annotations");
+      let chart = svg.append("g").attr("id", svgId + "points")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      const postExtent = d3.extent(data, d => d['posts']);
+      const postScale = d3.scaleLinear().domain(postExtent).range([0, width]);
+
+      let histogram = d3.histogram()
+        .value(function (d) { return d['posts']; })
+        .domain(postScale.domain())
+        .thresholds(postScale.ticks(50));
+
+      let bins = histogram(data);
+
+      const userExtent = [0, d3.max(bins, function (d) { return d.length; })];
+      const userScale = d3.scaleLinear().domain(userExtent).range([height, 0]);
+
+      let leftAxis = d3.axisLeft(userScale)
+        .tickFormat(function (d) {
+          if ((d / 1000) >= 1) {
+            d = d / 1000 + "K";
+          }
+          return d;
+        });
+      let leftGridlines = d3.axisLeft(userScale)
+        .tickSize(-width - 10)
+        .tickFormat("");
+      let bottomAxis = d3.axisBottom(postScale)
+      let bottomGridlines = d3.axisBottom(postScale)
+        .tickSize(-height - 10)
+        .tickFormat("")
+
+      annotations.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+        .call(leftAxis);
+      annotations.append("g")
+        .attr("class", "y gridlines")
+        .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+        .call(leftGridlines);
+      annotations.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+        .call(bottomAxis);
+      annotations.append("g")
+        .attr("class", "x gridlines")
+        .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+        .call(bottomGridlines);
+
+      svg.selectAll("rect")
+        .data(bins)
+        .enter()
+        .append("rect")
+        .attr("x", 1)
+        .attr("transform", function (d) { return "translate(" + (margin.left + postScale(d.x0)) + "," + (margin.top + userScale(d.length)) + ")"; })
+        .attr("width", function (d) { return postScale(d.x1) - postScale(d.x0) - 1; })
+        .attr("height", function (d) { return height - userScale(d.length); })
+        .style("fill", color)
+    }
+
+
+    /**
+     *  Data should be given in a 2d array with the value being the
+     *  number of changes for for a pixel at (row, col).
+     *  DivId should be the id for the div that the heatmap will be
+     *  nested inside.
+     *  PixelSize should be the size of each pixel in the heatmap.
+     * 
+     *  Credit: Adapted from https://jeffrz.github.io/info4310-sp2022/notes/22.04.25.notes.htm
+     **/
+    async function heatmap(data, divId, pixelSize) {
+
+      let width = data[0].length * pixelSize;
+      let height = data.length * pixelSize;
+
+      let data1D = []
+      data.forEach((row, i) => {
+        row.forEach((val, j) => {
+          data1D.push({
+            'x': j,
+            'y': i % width,
+            'value': val
+          })
+        })
+      })
+
+      calc1D = data.flat()
+      let min = d3.min(calc1D)
+      let max = d3.max(calc1D)
+
+      //make the colorscale for explanation heat map
+      let heatmap_color = d3.scaleSequential()
+        .interpolator(d3.interpolateViridis)
+        .domain([min, max])
+
+      let canvas = d3.select("#" + divId)
+        .append('canvas')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('id', divId + 'canvas')
+
+      let context = canvas.node().getContext('2d');
+
+      // create a parent for all the elements
+      let changes = document.createElement('changes');
+      let heatmap = d3.select(changes);
+
+      //bind the data to canvas elements
+      heatmap.selectAll('changes.rect')
+        .data(data1D)
+        .enter()
+        .append('changes')
+        .attr('class', 'rect')
+        .attr("height", pixelSize)
+        .attr("width", pixelSize)
+        .attr("x", cell => { return cell.x * pixelSize })
+        .attr("y", cell => { return cell.y * pixelSize })
+        .attr("fillStyle", cell => {
+          let color = d3.color(heatmap_color(cell.value))
+          color.opacity = 0.5;
+          return color + "";
         })
 
-        let tileData2022 = await d3.csv("../data/2022_time_data_all.csv");
-        tileData2022.forEach(d => {
-          d['count'] = parseInt(d['count']);
-          d['min_from_zero'] = parseInt(d['min_from_zero']);
+      context.clearRect(0, 0, width, height);
+
+      heatmap.selectAll('changes.rect')
+        .each(function (d, i) {
+          let node = d3.select(this);
+          context.beginPath();
+          context.rect(node.attr('x'),
+            node.attr('y'),
+            node.attr('width'),
+            node.attr('height'));
+          context.fillStyle = node.attr('fillStyle');
+          context.fill();
         })
+    }
 
-        tileschartmultiple(tileData2017, tileData2022, 'expo1');
-        tileschart(tileData2017, 'expo2', color_17);
-        tileschart(tileData2022, 'expo3', color_22);
+    /**
+     * When adding a key point, make sure to also call:
+     *      heatmap(<data>, <heatmapname>, <pixelSize>);
+     * in the requestData() function. 
+     * <heatmapname> should match the heatmapname for the new key point.
+     * TODO: Add 3 more key points.
+     **/
+    addKeypoint(
+      title = "Canadian Flag",
+      divname = "canada",
+      heatmapname = "canadianflag",
+      paragraph1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras.",
+      paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
+    )
 
-        let userData2017 = await d3.csv("../data/2017_user_data.csv");
-
-        let userData2022 = await d3.csv("../data/2022_user_data.csv");
-
-        histogram(userData2017, 'expo4');
-
-        // TODO: replace testData with real data
-        const canadianflagData = await d3.text("../data/test1.csv");
-        const frenchflagData = await d3.text("../data/norm_updates_3022.csv");
-
-        heatmap(csvToArray(canadianflagData), 'canadianflag', 10);
-        heatmap(csvToArray(frenchflagData), 'frenchflag', 1);
-
-      }
+    addKeypoint(
+      title = "French Flag",
+      divname = "france",
+      heatmapname = "frenchflag",
+      paragraph1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras.",
+      paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
+    )
 
 
-      requestData();
 
-      // for the dynamic styling on the anchor nav sidebar--
-      // this must stay at the bottom of the script to work
-      const sections = document.querySelectorAll("div[class='case']");
-      window.addEventListener("scroll", navHighlighter); // event listener for scroll
-    </script>
+    function csvToArray(csv) {
+      rows = csv.split("\n");
+      return rows.map(function (row) {
+        return row.split(",");
+      });
+    };
+
+    const requestData = async () => {
+
+      let tileData2017 = await d3.csv("../data/2017_time_data.csv");
+      tileData2017.forEach(d => {
+        d['count'] = parseInt(d['count']);
+        d['min_from_zero'] = parseInt(d['min_from_zero']);
+      })
+
+      let tileData2022 = await d3.csv("../data/2022_time_data_all.csv");
+      tileData2022.forEach(d => {
+        d['count'] = parseInt(d['count']);
+        d['min_from_zero'] = parseInt(d['min_from_zero']);
+      })
+
+      tileschartmultiple(tileData2017, tileData2022, 'expo1', color_17, color_22);
+      tileschart(tileData2017, 'expo2', color_17);
+      tileschart(tileData2022, 'expo3', color_22);
+
+      let userData2017 = await d3.csv("../data/2017_user_data.csv");
+      histogram(userData2017, 'expo4', color_17);
+
+      let userData2022 = await d3.csv("../data/2022_user_data.csv");
+      histogram(userData2022, 'expo5', color_22);
+
+      // TODO: replace testData with real data
+      const canadianflagData = await d3.text("../data/test1.csv");
+      heatmap(csvToArray(canadianflagData), 'canadianflag', 10);
+
+      const frenchflagData = await d3.text("../data/norm_updates_3022.csv");
+      heatmap(csvToArray(frenchflagData), 'frenchflag', 1);
+
+    }
+
+
+    requestData();
+
+    // for the dynamic styling on the anchor nav sidebar--
+    // this must stay at the bottom of the script to work
+    const sections = document.querySelectorAll("div[class='case']");
+    window.addEventListener("scroll", navHighlighter); // event listener for scroll
+  </script>
 </body>
 
 </html>
