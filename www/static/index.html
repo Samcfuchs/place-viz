@@ -167,23 +167,29 @@
         let chart = svg.append("g").attr("id", svgId + "points")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        const userExtent = [0, 1000];
-        const userScale = d3.scaleLinear().domain(userExtent).range([height, 0]);
         const postExtent = d3.extent(data, d => d['posts']);
         const postScale = d3.scaleLinear().domain(postExtent).range([0, width]);
 
         let histogram = d3.histogram()
           .value(function (d) { return d['posts']; })
           .domain(postScale.domain())
-          .thresholds(postScale.ticks(10));
+          .thresholds(postScale.ticks(50));
 
-        // And apply this function to data to get the bins
         let bins = histogram(data);
 
+        const userExtent = [0, d3.max(bins, function (d) { return d.length; })];
+        const userScale = d3.scaleLinear().domain(userExtent).range([height, 0]);
+
         let leftAxis = d3.axisLeft(userScale)
+          .tickFormat(function (d) {
+            if ((d / 1000) >= 1) {
+              d = d / 1000 + "K";
+            }
+            return d;
+          });
         let leftGridlines = d3.axisLeft(userScale)
           .tickSize(-width - 10)
-          .tickFormat("")
+          .tickFormat("");
         let bottomAxis = d3.axisBottom(postScale)
         let bottomGridlines = d3.axisBottom(postScale)
           .tickSize(-height - 10)
@@ -192,7 +198,7 @@
         annotations.append("g")
           .attr("class", "y axis")
           .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
-          .call(leftAxis)
+          .call(leftAxis);
         annotations.append("g")
           .attr("class", "y gridlines")
           .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
@@ -200,11 +206,27 @@
         annotations.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
-          .call(bottomAxis);
+          .call(bottomAxis)
+          .selectAll("text")
+          .attr("y", 0)
+          .attr("x", 10)
+          .attr("dy", ".35em")
+          .attr("transform", "rotate(90)")
+          .style("text-anchor", "start");
         annotations.append("g")
           .attr("class", "x gridlines")
           .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
           .call(bottomGridlines);
+
+        svg.selectAll("rect")
+          .data(bins)
+          .enter()
+          .append("rect")
+          .attr("x", 1)
+          .attr("transform", function (d) { return "translate(" + (margin.left + postScale(d.x0)) + "," + (margin.top + userScale(d.length)) + ")"; })
+          .attr("width", function (d) { return postScale(d.x1) - postScale(d.x0) - 1; })
+          .attr("height", function (d) { return height - userScale(d.length); })
+          .style("fill", "#69b3a2")
       }
 
 
@@ -331,6 +353,7 @@
         userData2017.forEach(d => {
           d['posts'] = parseInt(d['posts']);
         })
+        userData2017 = userData2017.filter(d => d['posts'] > 10);
 
         console.log(userData2017);
         histogram(userData2017, 'expo2');
