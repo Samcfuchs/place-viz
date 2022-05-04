@@ -84,16 +84,77 @@
     <script>
 
       async function tileschart(data, svgId) {
+        console.log(data);
+
         const svg = d3.select("#" + svgId);
-        const margin = { top: 15, right: 15, bottom: 40, left: 50 };
+        const margin = { top: 15, right: 15, bottom: 65, left: 80 };
         const width = svg.attr("width") - margin.left - margin.right;
         const height = svg.attr("height") - margin.top - margin.bottom;
 
         let annotations = svg.append("g").attr("id", svgId + "annotations");
         let chart = svg.append("g").attr("id", svgId + "points")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-          .style("background-color", "blue");
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+        const countExtent = d3.extent(data, d => d['count']);
+        const countScale = d3.scalePow().exponent(0.5).domain(countExtent).range([height, 0]);
+        const timeExtent = d3.extent(data, d => d['min_from_zero']);
+        console.log(timeExtent)
+        const timeScale = d3.scaleLinear().domain(timeExtent).range([0, width]);
+
+        let leftAxis = d3.axisLeft(countScale);
+        let leftGridlines = d3.axisLeft(countScale)
+          .tickSize(-width - 10)
+          .tickFormat("");
+        let bottomAxis = d3.axisBottom(timeScale)
+        let bottomGridlines = d3.axisBottom(timeScale)
+          .tickSize(-height - 10)
+          .tickFormat("");
+
+        annotations.append("g")
+          .attr("class", "y axis")
+          .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+          .call(leftAxis);
+        annotations.append("g")
+          .attr("class", "y gridlines")
+          .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
+          .call(leftGridlines);
+        annotations.append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "end")
+          .attr("x", -height / 2)
+          .attr("y", 15)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)")
+          .text("# of Changes");
+
+        annotations.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+          .call(bottomAxis);
+        annotations.append("g")
+          .attr("class", "x gridlines")
+          .attr("transform", "translate(" + margin.left + "," + (height + margin.top + 10) + ")")
+          .call(bottomGridlines);
+        annotations.append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "end")
+          .attr("x", width / 2 + margin.left)
+          .attr("y", height + margin.bottom)
+          .text("Time");
+
+
+        let lineGen = d3.line()
+          .x(d => timeScale(d['min_from_zero']))
+          .y(d => countScale(d['count']))
+          .curve(d3.curveMonotoneX);
+
+        chart.append("path")
+          .datum(data)
+          .attr("class", "line")
+          .attr("fill", "none")
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 3)
+          .attr("d", lineGen);
 
       }
 
@@ -209,18 +270,16 @@
 
       const requestData = async () => {
 
+        const tileData2017 = await d3.csv("../data/2017_timedata.csv");
+
+        tileschart(tileData2017, 'expo1');
+
         // TODO: replace testData with real data
         const canadianflagData = await d3.text("../data/test1.csv");
         const frenchflagData = await d3.text("../data/norm_updates_3022.csv");
 
         heatmap(csvToArray(canadianflagData), 'canadianflag', 10);
         heatmap(csvToArray(frenchflagData), 'frenchflag', 1);
-
-        let testTileData = [
-          { count: 7112, time1: 1491163080.0, time2: 1491163140.0, min_from_zero: 4074.0 }
-        ];
-
-        tileschart([], 'expo1');
 
       }
 
