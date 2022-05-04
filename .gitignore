@@ -13,3 +13,6 @@ __pycache__/
 test.csv
 *.csv
 .vscode
+
+# Data files
+!www/static/data/*.csv
