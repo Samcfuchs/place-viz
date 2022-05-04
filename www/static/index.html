@@ -172,11 +172,13 @@
         const postExtent = d3.extent(data, d => d['posts']);
         const postScale = d3.scaleLinear().domain(postExtent).range([0, width]);
 
-        let bin = d3.bin().domain(postScale.domain()).value(d => d['posts']).thresholds(postScale.ticks());
-        let bins = bin(data);
+        let histogram = d3.histogram()
+          .value(function (d) { return d['posts']; })
+          .domain(postScale.domain())
+          .thresholds(postScale.ticks(10));
 
-        const countMax = d3.max(bins, d => d.length);
-        userScale.domain([0, countMax]);
+        // And apply this function to data to get the bins
+        let bins = histogram(data);
 
         let leftAxis = d3.axisLeft(userScale)
         let leftGridlines = d3.axisLeft(userScale)
