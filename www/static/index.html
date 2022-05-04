@@ -158,7 +158,6 @@
           .x(d => timeScale(d['min_from_zero']))
           .y(d => countScale(d['count']))
 
-        console.log(data_reg)
         chart.append("path")
           .datum(data_reg)
           .attr("class", "line")
@@ -169,7 +168,12 @@
 
       }
 
-      async function histogram(data, svgId) {
+      async function histogram(data, color, svgId) {
+
+        data.forEach(d => {
+          d['posts'] = parseInt(d['posts']);
+        })
+        data = data.filter(d => d['posts'] > 10);
 
         const svg = d3.select("#" + svgId);
         const margin = { top: 10, right: 10, bottom: 50, left: 50 };
@@ -239,7 +243,7 @@
           .attr("transform", function (d) { return "translate(" + (margin.left + postScale(d.x0)) + "," + (margin.top + userScale(d.length)) + ")"; })
           .attr("width", function (d) { return postScale(d.x1) - postScale(d.x0) - 1; })
           .attr("height", function (d) { return height - userScale(d.length); })
-          .style("fill", "#69b3a2")
+          .style("fill", color)
       }
 
 
@@ -363,17 +367,10 @@
         tileschart(tileData2017, 'expo1');
 
         let userData2017 = await d3.csv("../data/2017_user_data.csv");
-        userData2017.forEach(d => {
-          d['posts'] = parseInt(d['posts']);
-        })
-        userData2017 = userData2017.filter(d => d['posts'] > 10);
-        let userData2022 = await d3.csv("../data/2022_user_data.csv");
-        userData2022.forEach(d => {
-          d['posts'] = parseInt(d['posts']);
-        })
-        userData2022 = userData2022.filter(d => d['posts'] > 10);
 
-        histogram(userData2017, 'expo2');
+        let userData2022 = await d3.csv("../data/2022_user_data.csv");
+
+        histogramMultiple(userData2017, userData2022, 'expo2');
 
         // TODO: replace testData with real data
         const canadianflagData = await d3.text("../data/test1.csv");
