@@ -95,7 +95,7 @@
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         const countExtent = d3.extent(data, d => d['count']);
-        const countScale = d3.scalePow().exponent(0.5).domain(countExtent).range([height, 0]);
+        const countScale = d3.scaleLinear().domain(countExtent).range([height, 0]);
         const timeExtent = d3.extent(data, d => d['min_from_zero']);
         const timeScale = d3.scaleLinear().domain(timeExtent).range([0, width]);
 
@@ -151,7 +151,7 @@
           .attr("class", "line")
           .attr("fill", "none")
           .attr("stroke", "steelblue")
-          .attr("stroke-width", 3)
+          .attr("stroke-width", 1)
           .attr("d", lineGen);
 
       }
