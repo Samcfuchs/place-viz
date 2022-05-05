@@ -4,6 +4,6 @@ function addKeypoint(title, divname, heatmapname, paragraph1, paragraph2) {
     let div = document.getElementById(divname)
     div.innerHTML += "<h3>" + title + "</h3>"
     div.innerHTML += "<p>" + paragraph1 + "</p>"
-    div.innerHTML += "<div id='" + heatmapname + "'></div>"
+    div.innerHTML += "<div class='heatmap' id='" + heatmapname + "'></div>"
     div.innerHTML += "<p>" + paragraph2 + "</p>"
 }
