@@ -328,8 +328,6 @@
 
       let bins = histogram(data);
 
-      console.log(bins);
-
       const userExtent = [0, d3.max(bins, function (d) { return d.length; })];
       const userScale = d3.scaleLinear().domain(userExtent).range([height, 0]);
 
@@ -388,7 +386,7 @@
         .append("rect")
         .attr("x", 1)
         .attr("transform", function (d) { return "translate(" + (margin.left + postScale(d.x0)) + "," + (margin.top + userScale(d.length)) + ")"; })
-        .attr("width", function (d) { return postScale(d.x1) - postScale(d.x0) - 1; })
+        .attr("width", function (d) { return postScale(d.x1) == postScale(d.x0) ? 0 : postScale(d.x1) - postScale(d.x0) - 1; })
         .attr("height", function (d) { return height - userScale(d.length); })
         .style("fill", color);
     }
