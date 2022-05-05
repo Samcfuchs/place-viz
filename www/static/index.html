@@ -26,13 +26,13 @@
   <div class="container col">
 
     <div class="center">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo
-        viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus
-        ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non
-        curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur
-        lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla
-        phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras.</p>
+      <p>
+        Starting on April 1, 2022, Reddit users collaboratively edited a 1000 pixel x 1000 pixel canvas on the r/place
+        subreddit. Each user was able to change the color of a single pixel with replacement from a limited palette with
+        5 minute pauses in between changes. The canvas doubled in size two times, eventually ending up 2000 pixel x 2000
+        pixel large. Various groups, such as r/turkey, r/france, twitch audiences, etc. banded together to leave their
+        mark on the canvas.
+      </p>
       <div>
         <svg id="expo1" width="900" height="300"></svg>
       </div>
@@ -111,7 +111,9 @@
 
       let leftAxis = d3.axisLeft(countScale)
         .tickFormat(function (d) {
-          if ((d / 1000) >= 1) {
+          if ((d / 1000000) >= 1) {
+            d = d / 1000000 + "M";
+          } else if ((d / 1000) >= 1) {
             d = d / 1000 + "K";
           }
           return d;
@@ -202,7 +204,9 @@
 
       let leftAxis = d3.axisLeft(countScale)
         .tickFormat(function (d) {
-          if ((d / 1000) >= 1) {
+          if ((d / 1000000) >= 1) {
+            d = d / 1000000 + "M";
+          } else if ((d / 1000) >= 1) {
             d = d / 1000 + "K";
           }
           return d;
@@ -328,7 +332,9 @@
 
       let leftAxis = d3.axisLeft(userScale)
         .tickFormat(function (d) {
-          if ((d / 1000) >= 1) {
+          if ((d / 1000000) >= 1) {
+            d = d / 1000000 + "M";
+          } else if ((d / 1000) >= 1) {
             d = d / 1000 + "K";
           }
           return d;
@@ -452,7 +458,6 @@
      *      heatmap(<data>, <heatmapname>, <pixelSize>);
      * in the requestData() function. 
      * <heatmapname> should match the heatmapname for the new key point.
-     * TODO: Add 3 more key points.
      **/
     addKeypoint(
       title = "Canadian Flag",
@@ -511,7 +516,7 @@
         d['min_from_zero'] = parseInt(d['min_from_zero']);
       })
 
-      let tileData2022 = await d3.csv("../data/2022_time_data_all.csv");
+      let tileData2022 = await d3.csv("../data/2022_time_data.csv");
       tileData2022.forEach(d => {
         d['count'] = parseInt(d['count']);
         d['min_from_zero'] = parseInt(d['min_from_zero']);
@@ -520,12 +525,6 @@
       tileschartmultiple(tileData2017, tileData2022, 'expo1', color_17, color_22);
       tileschart(tileData2017, 'expo2', color_17);
       tileschart(tileData2022, 'expo3', color_22);
-
-      let userData2017 = await d3.csv("../data/2017_user_data.csv");
-      histogram(userData2017, 'expo4', color_17);
-
-      let userData2022 = await d3.csv("../data/2022_user_data.csv");
-      histogram(userData2022, 'expo5', color_22);
 
       // TODO: replace testData with real data
       const canadianflagData = await d3.text("../data/test1.csv");
@@ -543,6 +542,12 @@
       const voidData = await d3.text("../data/test2.csv");
       heatmap(csvToArray(voidData), 'voidmap', 10);
 
+
+      let userData2017 = await d3.csv("../data/2017_user_data.csv");
+      histogram(userData2017, 'expo4', color_17);
+
+      let userData2022 = await d3.csv("../data/2022_user_data.csv");
+      histogram(userData2022, 'expo5', color_22);
     }
 
 
