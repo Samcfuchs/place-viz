@@ -30,8 +30,9 @@
         Starting on April 1, 2022, Reddit users collaboratively edited a 1000 pixel x 1000 pixel canvas on the r/place
         subreddit. Each user was able to change the color of a single pixel with replacement from a limited palette with
         5 minute pauses in between changes. The canvas doubled in size two times, eventually ending up 2000 pixel x 2000
-        pixel large. Various groups, such as r/turkey, r/france, twitch audiences, etc. banded together to leave their
-        mark on the canvas.
+        pixel large. r/place had appeared before in 2017, but the volume of contributers in the 2022 r/place far
+        outshined its predecessor. Various groups, such as r/turkey, r/france, twitch audiences, etc. banded together to
+        leave their mark on the canvas.
       </p>
       <div>
         <svg id="expo1" width="900" height="300"></svg>
@@ -306,7 +307,7 @@
       data.forEach(d => {
         d['posts'] = parseInt(d['posts']);
       })
-      data = data.filter(d => d['posts'] < 100);
+      data = data.filter(d => d['posts'] < 51);
 
       const svg = d3.select("#" + svgId);
       const margin = { top: 10, right: 10, bottom: 65, left: 80 };
@@ -326,6 +327,8 @@
         .thresholds(postScale.ticks(50));
 
       let bins = histogram(data);
+
+      console.log(bins);
 
       const userExtent = [0, d3.max(bins, function (d) { return d.length; })];
       const userScale = d3.scaleLinear().domain(userExtent).range([height, 0]);
