@@ -52,7 +52,7 @@
         fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed
         cras.</p>
       <div>
-        <svg id="expo7" width="900" height="300"></svg>
+        <svg id="expo7" width="900" height="100"></svg>
       </div>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo
@@ -556,54 +556,21 @@
     }
 
     async function barCompare(data1, data2, svgId) {
-      let data1_sum = 0
-      let data2_sum = 0
-
-      data1.forEach(d => {
-        data1_sum += parseInt(d["posts"]);
-      })
-
-      data2.forEach(d => {
-        data2_sum += parseInt(d["posts"]);
-      })
+      let data1_sum = 1166924
+      let data2_sum = 10381164
 
       const svg = d3.select("#" + svgId);
-      const margin = { top: 10, right: 10, bottom: 65, left: 80 };
+      const margin = { top: 10, right: 150, bottom: 20, left: 20 };
       const width = svg.attr("width") - margin.left - margin.right;
       const height = svg.attr("height") - margin.top - margin.bottom;
 
-      let annotations = svg.append("g").attr("id", svgId + "annotations");
-      let chart = svg.append("g").attr("id", svgId + "points")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      const postExtent = [0, Math.max(data1_sum, data2_sum)];
+      const postExtent = [0, 10381164];
       const postScale = d3.scaleLinear()
         .domain(postExtent)
         .range([0, width])
 
-      let leftGridlines = d3.axisLeft(postScale)
-        .tickFormat("");
 
-      annotations.append("g")
-        .attr("class", "y axis")
-        .attr("transform", "translate(" + (margin.left - 10) + "," + margin.top + ")")
-        .call(leftGridlines);
-
-      // annotations.append("text")
-      //   .attr("class", "y label")
-      //   .attr("text-anchor", "end")
-      //   .attr("x", -height / 2)
-      //   .attr("y", 15)
-      //   .attr("dy", ".75em")
-      //   .attr("transform", "rotate(-90)")
-      //   .text("# of Users");
-
-      annotations.append("text")
-        .attr("class", "x label")
-        .attr("text-anchor", "end")
-        .attr("x", width / 2 + margin.left)
-        .attr("y", height + margin.bottom)
-        .text("# of Posts");
 
       // Bars
       svg
@@ -613,18 +580,72 @@
         .attr("x", margin.left)
         .attr("y", margin.top)
         .attr("width", postScale(data1_sum))
-        .attr("height", height / 3)
+        .attr("height", height/2) 
         .style("fill", color_17);
 
       svg
         .append("rect")
         .attr("class", "2022users")
-        .attr("number", data2_sum)
-        .attr("x", margin.left)
-        .attr("y", margin.top + margin.top + (height / 3))
+        .attr("number",data2_sum)
+        .attr("x", margin.left ) 
+        .attr("y", margin.top+margin.top + (height/2) ) 
         .attr("width", postScale(data2_sum))
-        .attr("height", height / 3)
+        .attr("height", height/2) 
         .style("fill", color_22);
+
+        let annotations = svg.append("g").attr("id", svgId + "annotations");
+
+        annotations.append("text")
+        .attr("class", "inbarcount")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline',"middle")
+        .attr("x", margin.left + 10)
+        .attr("y", height/2 -5)
+        .style("fill","white")
+        .text("2017");
+
+        annotations.append("text")
+        .attr("class", "inbarsubtext")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline',"middle")
+        .attr("x", postScale(data1_sum) + margin.left+5)
+        .attr("y", height/2 )
+        .style("fill",color_17)
+        .text("unique users");
+        annotations.append("text")
+        .attr("class", "inbarcount")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline',"middle")
+        .attr("x", postScale(data1_sum) + margin.left+5)
+        .attr("y", height/2 -15)
+        .style("fill",color_17)
+        .text(data1_sum.toLocaleString("en-US"));
+
+        annotations.append("text")
+        .attr("class", "inbarcount")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline',"middle")
+        .attr("x", margin.left + 10)
+        .attr("y", height + 5)
+        .style("fill","white")
+        .text("2022");
+
+        annotations.append("text")
+        .attr("class", "inbarcount")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline',"middle")
+        .attr("x", postScale(data2_sum) + margin.left+5)
+        .attr("y", height)
+        .style("fill",color_22)
+        .text(data2_sum.toLocaleString("en-US"));
+        annotations.append("text")
+        .attr("class", "inbarsubtext")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline',"middle")
+        .attr("x", postScale(data2_sum) + margin.left+5)
+        .attr("y", height + 15)
+        .style("fill",color_22)
+        .text("unique users");
     }
 
 
@@ -716,6 +737,8 @@
       title = "Canadian Flag",
       divname = "canada",
       heatmapname = "canadianflag",
+      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy"],
+                 ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy"]],
       paragraph1 = "In a comical turn of events, what began as a collaborative effort between those at r/Canada to create a depiction of the Canadian flag turned into a failed attempt at drawing a maple leaf that spanned nearly the entirety of r/place\’\s existence. Canada\’\s flag quickly became the target of memes as their leaf was never quite in shape. This led to constant vandalism of the flag. At one point, the flag was changed to yellow and the leaf changed to a banana. Canada managed to gain a little progress on their leaf, however the canvas ended before it could be fully completed.",
       paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
     )
@@ -724,6 +747,9 @@
       title = "French Flag",
       divname = "france",
       heatmapname = "frenchflag",
+      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed."],
+                 ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy"],
+                 ["image3.jpg", "This is a picture of my dog, Benny. He is a very good boy"]],
       paragraph1 = "With what originally began as a large French flag in the lower left hand corner, this collaborative effort by the folks behind r/France eventually evolved into beautiful recreations of the Eiffel Tower, Arc de Triomphe, the Louvre, and even Remy from Ratatouille! The Void tried its best to take over but r/France prevailed and eventually held one of the largest cohesive squares on the map.",
       paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
     )
@@ -732,6 +758,8 @@
       title = "Dutch Paintings",
       divname = "dutch",
       heatmapname = "dutchpaintings",
+      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy"],
+                 ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy"]],
       paragraph1 = "An incredibly accurate recreation of very famous dutch paintings such as Vermeer\’\s \“\Girl with a Pearl Earring\”\, Rembrandt’\s\ \“\The Night Watch\”\, and a famous painting depicting Michael de Ruyter\’\s naval battle, a source of immense pride for the Netherlands. In addition, the users at r/placeNL decided to help out those at r/canada in producing a Canadian flag for them, an interesting reflection of the relationship between Canada and Netherlands stemming from WW2 where Canadian troops were among the first to liberate many occupied Dutch cities.",
       paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
     )
@@ -740,6 +768,8 @@
       title = "Creeper Animation",
       divname = "creeper",
       heatmapname = "creeperanimation",
+      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy"],
+                 ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy"]],
       paragraph1 = "This is where the Minecraft loading screen animation took place, which was one of the most upvoted posts on r/place. The animation was created by streamers NymN and Zoil.",
       paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
     )
@@ -748,6 +778,8 @@
       title = "The Void",
       divname = "void",
       heatmapname = "voidmap",
+      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy"],
+                 ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy"]],
       paragraph1 = "\“\The Void\”\ refers to several distorted images and art present nearly at all times of r/place\’\s existence, especially as many griefers would try their best to destroy art around the canvas. In addition, The Void, in its final moments, was a large area of black pixels consuming art wherever it spread. After the main void was destroyed by The First Hand, it moved up TotalBiscuit\’\s hair and reformed right before the canvas ended. Created by The Swarm.",
       paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
     )
