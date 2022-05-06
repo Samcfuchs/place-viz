@@ -6,8 +6,8 @@ import gc
 
 # Load pickle with 3D array of pixel values.
 
-t = 1
-c = 1
+t = 2
+c = 2
 name = "100"
 
 with open(f'data/compiled/t{t}-c{c}.p','rb') as f:
@@ -25,8 +25,8 @@ gc.collect()
 
 # Grab a subset of the data if you want
 # sample = diff[ :, 497:528, 175:244] #canada
-# sample = diff[188:3010, (1733-1000):(1947-1000), 540:714] #Dutch 
-sample = diff[2262:2498, 665:714, (1832-1000):(1888-1000)] #Minecraft 
+sample = diff[188:3010, (1733-1000):(1970-1000), 500:714] #Dutch 
+# sample = diff[2262:2498, 665:714, (1832-1000):(1888-1000)] #Minecraft 
 print(sample.shape)
 
 # This is the part that takes the longest
@@ -45,5 +45,5 @@ norm_updates = normalizer(n_updates, k=5)
 # Save these values to CSV files
 # np.savetxt(f"data/compiled/dutch_n_updates_t{t}-c{c}.csv", n_updates.astype(int), delimiter=',', fmt='%.0f')
 # np.savetxt(f"data/compiled/dutch_norm_updates_t{t}-c{c}.csv", norm_updates, delimiter=',', fmt='%.4f')
-np.savetxt(f"data/compiled/minecraft_n_updates_" + name + ".csv", n_updates.astype(int), delimiter=',', fmt='%.0f')
-np.savetxt(f"data/compiled/minecraft_norm_updates_" + name + ".csv", norm_updates, delimiter=',', fmt='%.4f')
+np.savetxt(f"data/compiled/dutch_n_updates_" + name + ".csv", n_updates.astype(int), delimiter=',', fmt='%.0f')
+np.savetxt(f"data/compiled/dutch_norm_updates_" + name + ".csv", norm_updates, delimiter=',', fmt='%.4f')
