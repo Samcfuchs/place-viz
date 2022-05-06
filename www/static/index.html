@@ -303,11 +303,14 @@
     }
 
     async function histogram(data, svgId, color) {
-
       data.forEach(d => {
-        d['posts'] = parseInt(d['posts']);
+        d["users"] = parseInt(d["posts"]);
+        d['posts'] = parseInt(d[""]);
+        console.log(d["posts"])
       })
-      data = data.filter(d => d['posts'] < 51);
+      let bin_num = 50
+      data = data.filter(d => d['posts'] <= bin_num);
+      console.log(data)
 
       const svg = d3.select("#" + svgId);
       const margin = { top: 10, right: 10, bottom: 65, left: 80 };
@@ -319,16 +322,14 @@
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       const postExtent = d3.extent(data, d => d['posts']);
-      const postScale = d3.scaleLinear().domain(postExtent).range([0, width]);
+      const postScale = d3.scaleBand()
+      .domain(data.map(d=>d['posts']))
+      .range([0, width])
+      .padding(0.2);
+      
 
-      let histogram = d3.histogram()
-        .value(function (d) { return d['posts']; })
-        .domain(postScale.domain())
-        .thresholds(postScale.ticks(50));
-
-      let bins = histogram(data);
-
-      const userExtent = [0, d3.max(bins, function (d) { return d.length; })];
+      const userExtent = d3.extent(data, d => d['users']);
+      console.log(userExtent)
       const userScale = d3.scaleLinear().domain(userExtent).range([height, 0]);
 
       let leftAxis = d3.axisLeft(userScale)
@@ -344,7 +345,7 @@
         .tickSize(-width - 10)
         .tickFormat("");
       let bottomAxis = d3.axisBottom(postScale)
-      let bottomGridlines = d3.axisBottom(postScale)
+      let bottomGridlines = d3.axisBottom(postScale).ticks(bin_num)
         .tickSize(-height - 10)
         .tickFormat("")
 
@@ -380,14 +381,18 @@
         .attr("y", height + margin.bottom)
         .text("# of Posts");
 
+
+  // Bars
       svg.selectAll("rect")
-        .data(bins)
+        .data(data)
         .enter()
         .append("rect")
-        .attr("x", 1)
-        .attr("transform", function (d) { return "translate(" + (margin.left + postScale(d.x0)) + "," + (margin.top + userScale(d.length)) + ")"; })
-        .attr("width", function (d) { return postScale(d.x1) == postScale(d.x0) ? 0 : postScale(d.x1) - postScale(d.x0) - 1; })
-        .attr("height", function (d) { return height - userScale(d.length); })
+        .attr("users", d=> d["users"])
+        .attr("num_posts", d=> d["posts"])
+        .attr("x", d=> postScale(d["posts"]) ) 
+        .attr("y", d=> userScale(d["users"]) ) 
+        .attr("width", postScale.bandwidth())
+        .attr("height", d => height - userScale(d['users']) )
         .style("fill", color);
     }
 
@@ -525,13 +530,13 @@
 
     const requestData = async () => {
 
-      let tileData2017 = await d3.csv("../data/2017_time_data.csv");
+      let tileData2017 = await d3.csv("data/2017_time_data.csv");
       tileData2017.forEach(d => {
         d['count'] = parseInt(d['count']);
         d['min_from_zero'] = parseInt(d['min_from_zero']);
       })
 
-      let tileData2022 = await d3.csv("../data/2022_time_data.csv");
+      let tileData2022 = await d3.csv("data/2022_time_data.csv");
       tileData2022.forEach(d => {
         d['count'] = parseInt(d['count']);
         d['min_from_zero'] = parseInt(d['min_from_zero']);
@@ -542,26 +547,26 @@
       tileschart(tileData2022, 'expo3', color_22);
 
       // TODO: replace testData with real data
-      const canadianflagData = await d3.text("../data/test1.csv");
-      heatmap(csvToArray(canadianflagData), 'canadianflag', 10);
+      // const canadianflagData = await d3.text("../data/test1.csv");
+      // heatmap(csvToArray(canadianflagData), 'canadianflag', 10);
 
-      const frenchflagData = await d3.text("../data/test1.csv");
-      heatmap(csvToArray(frenchflagData), 'frenchflag', 1);
+      // const frenchflagData = await d3.text("../data/test1.csv");
+      // heatmap(csvToArray(frenchflagData), 'frenchflag', 1);
 
-      const dutchData = await d3.text("../data/test1.csv");
-      heatmap(csvToArray(dutchData), 'dutchpaintings', 1);
+      // const dutchData = await d3.text("../data/test1.csv");
+      // heatmap(csvToArray(dutchData), 'dutchpaintings', 1);
 
-      const creeperData = await d3.text("../data/test2.csv");
-      heatmap(csvToArray(creeperData), 'creeperanimation', 1);
+      // const creeperData = await d3.text("../data/test2.csv");
+      // heatmap(csvToArray(creeperData), 'creeperanimation', 1);
 
-      const voidData = await d3.text("../data/test2.csv");
-      heatmap(csvToArray(voidData), 'voidmap', 10);
+      // const voidData = await d3.text("../data/test2.csv");
+      // heatmap(csvToArray(voidData), 'voidmap', 10);
 
 
-      let userData2017 = await d3.csv("../data/2017_user_data.csv");
+      let userData2017 = await d3.csv("data/2017_user_data.csv");
       histogram(userData2017, 'expo4', color_17);
 
-      let userData2022 = await d3.csv("../data/2022_user_data.csv");
+      let userData2022 = await d3.csv("data/2022_user_data.csv");
       histogram(userData2022, 'expo5', color_22);
     }
 
