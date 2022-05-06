@@ -3,17 +3,17 @@ import numpy as np
 from PIL import Image
 
 t = 2 # Type
-c = 0 # Quadrant
+c = 2 # Quadrant
 
-png_name = "0-1649111825.png" # Pick a png
+png_name = "2-1649080746.png" # Pick a png
 
 # x1 and y1 are top left corner, x2 and y2 are bottom right corner
-x1 = 175
-y1 = 497
-x2 = 244
-y2 = 528
+x1 = 540
+y1 = 1733-1000
+x2 = 714
+y2 = 1947-1000
 
-output_name = "Canada-100" # Final name
+output_name = "Dutch-66" # Final name
 
 if t==0:
     name1 = "data/img_2022/images_single/"
