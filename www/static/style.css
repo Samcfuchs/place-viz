@@ -223,6 +223,10 @@ canvas {
   margin: 10px;
 }
 
+video{
+  margin: 0 auto;
+}
+
 .imgandtext img {
   object-fit: contain;
   margin: 0 auto;
