@@ -11,7 +11,7 @@ function addKeypoint(title, divname, heatmapname, imglist, paragraph1, paragraph
     div.innerHTML += "<div class='heatmap' id='" + heatmapname + "'></div>"
     div.innerHTML += "<p>" + encodeHTML(paragraph2) + "</p>"
     if(imglist.length>0){
-        html.innerHTML += "<div class='gallery' id='gallery" + divname + "'></div>"
+        div.innerHTML += "<div class='gallery' id='gallery" + divname + "'></div>"
         let gal_div = document.getElementById('gallery'+divname)
         num_imgs = imglist.length
         img_counter = 1
