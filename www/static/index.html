@@ -94,7 +94,7 @@
     const color_17 = '#9932a8'
     const color_22 = '#439abf'
 
-    async function tileschart(data, svgId, color) {
+    async function tileschart(data, svgId, color, category) {
 
       const svg = d3.select("#" + svgId);
       const margin = { top: 15, right: 15, bottom: 65, left: 80 };
@@ -159,6 +159,34 @@
         .attr("y", height + margin.bottom)
         .text("Time");
 
+      let legend = chart.append('g')
+        .attr('class', 'gLegend')
+        .attr("transform", "translate(" + (width - 40) + "," + 5 + ")");
+
+      legend.append("rect")
+        .attr("class", "legend-background")
+        .attr("x", -15)
+        .attr("y", -10)
+        .attr("width", 60)
+        .attr("height", 20)
+        .style("fill", "white");
+
+      let radius = 6;
+
+      legend.append("circle")
+        .attr("class", "legend-node")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", radius)
+        .style("fill", color);
+
+      legend.append("text")
+        .attr("class", "legend-text")
+        .attr("x", radius * 2)
+        .attr("y", radius / 2)
+        .style("font-size", 12)
+        .text(category);
+
       loessRegression = d3.regressionLoess()
         .x(d => d['min_from_zero'])
         .y(d => d['count'])
@@ -185,7 +213,7 @@
 
     }
 
-    async function tileschartmultiple(data1, data2, svgId, color1, color2) {
+    async function tileschartmultiple(data1, data2, svgId, color1, color2, category1, category2) {
 
       const svg = d3.select("#" + svgId);
       const margin = { top: 15, right: 15, bottom: 65, left: 80 };
@@ -251,6 +279,49 @@
         .attr("x", width / 2 + margin.left)
         .attr("y", height + margin.bottom)
         .text("Time");
+
+      let legend = chart.append('g')
+        .attr('class', 'gLegend')
+        .attr("transform", "translate(" + (width - 40) + "," + 0 + ")");
+
+      legend.append("rect")
+        .attr("class", "legend-background")
+        .attr("x", -15)
+        .attr("y", -10)
+        .attr("width", 60)
+        .attr("height", 40)
+        .style("fill", "white");
+
+      let radius = 6;
+
+      legend.append("circle")
+        .attr("class", "legend-node")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", radius)
+        .style("fill", color1);
+
+      legend.append("circle")
+        .attr("class", "legend-node")
+        .attr("cx", 0)
+        .attr("cy", 20)
+        .attr("r", radius)
+        .style("fill", color2);
+
+      legend.append("text")
+        .attr("class", "legend-text")
+        .attr("x", radius * 2)
+        .attr("y", radius / 2)
+        .style("font-size", 12)
+        .text(category1);
+
+      legend.append("text")
+        .attr("class", "legend-text")
+        .attr("x", radius * 2)
+        .attr("y", 20 + radius / 2)
+        .style("font-size", 12)
+        .text(category2);
+
 
       loessRegression1 = d3.regressionLoess()
         .x(d => d['min_from_zero'])
@@ -537,9 +608,9 @@
         d['min_from_zero'] = parseInt(d['min_from_zero']);
       })
 
-      tileschartmultiple(tileData2017, tileData2022, 'expo1', color_17, color_22);
-      tileschart(tileData2017, 'expo2', color_17);
-      tileschart(tileData2022, 'expo3', color_22);
+      tileschartmultiple(tileData2017, tileData2022, 'expo1', color_17, color_22, 2017, 2018);
+      tileschart(tileData2017, 'expo2', color_17, 2017);
+      tileschart(tileData2022, 'expo3', color_22, 2022);
 
       // TODO: replace testData with real data
       const canadianflagData = await d3.text("../data/test1.csv");
