@@ -6,7 +6,7 @@ import gc
 
 # Load pickle with 3D array of pixel values.
 
-t = 1
+t = 2
 c = 0
 
 with open(f'data/compiled/t{t}-c{c}.p','rb') as f:
@@ -23,15 +23,15 @@ del arr
 gc.collect()
 
 # Grab a subset of the data if you want
-sample = diff
-sample.shape
+sample = diff[0:3010, 497:528, 175:244] #canada
+print(sample.shape)
 
 # This is the part that takes the longest
 changes = sample != 0
 
 # Sum changes through all time-steps
 n_updates = changes.sum(axis=0)
-n_updates.shape
+print(n_updates.shape)
 
 # Normalize the distribution of pixel values so it looks more legible
 def normalizer(n, k=1):
@@ -40,5 +40,5 @@ def normalizer(n, k=1):
 norm_updates = normalizer(n_updates, k=5)
 
 # Save these values to CSV files
-np.savetxt(f"data/compiled/n_updates_t{t}-c{c}.csv", n_updates.astype(int), delimiter=',', fmt='%.0f')
-np.savetxt(f"data/compiled/norm_updates_t{t}-c{c}.csv", norm_updates, delimiter=',', fmt='%.4f')
+np.savetxt(f"data/compiled/canada_n_updates_t{t}-c{c}.csv", n_updates.astype(int), delimiter=',', fmt='%.0f')
+np.savetxt(f"data/compiled/canda_norm_updates_t{t}-c{c}.csv", norm_updates, delimiter=',', fmt='%.4f')

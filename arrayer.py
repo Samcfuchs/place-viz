@@ -3,7 +3,7 @@ import pickle
 import os
 
 # Opening pickle
-filename = 'test.p'
+filename = 'images.p'
 
 infile = open(filename,'rb')
 mat_dict = pickle.load(infile)
@@ -68,6 +68,8 @@ three_matrix = np.dstack(three_list)
 
 final_matrix = np.vstack([np.hstack([zero_matrix, one_matrix]), np.hstack([two_matrix, three_matrix])])
 
-matrix_reshaped = final_matrix.reshape(final_matrix.shape[0], -1)
+print(final_matrix.shape)
 
-np.savetxt("test.csv", matrix_reshaped, delimiter =",")
+# matrix_reshaped = final_matrix.reshape(final_matrix.shape[0], -1)
+
+# np.savetxt("test.csv", matrix_reshaped, delimiter =",")
