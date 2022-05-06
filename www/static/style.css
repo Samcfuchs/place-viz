@@ -231,3 +231,14 @@ canvas {
 .reverse {
   flex-flow: row-reverse;
 }
+
+#dutch{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#dutch .pr{
+  margin-left: 10px;
+  width: 350px;
+}
