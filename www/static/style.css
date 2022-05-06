@@ -28,6 +28,17 @@ input[type="range"] {
   justify-content: center;
 }
 
+.test1{
+  background-color: blue;
+  position: absolute;
+}
+
+.test2{
+  background-color: red;
+  transform: translate(0,0);
+  position: relative;
+}
+
 .center p {
   max-width: 900px;
 }
