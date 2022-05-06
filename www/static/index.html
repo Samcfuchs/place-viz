@@ -723,7 +723,30 @@
     }
 
     async function heatmapOverTime(dataArray, divId, pixelSize) {
+      let value = d3.select("#" + divId)
+        .append('p')
+        .attr('id', divId + 'value-step')
 
+      let slider = d3.sliderBottom()
+        .min(0)
+        .max(dataArray.length - 1)
+        .width(300)
+        .on('onchange', val => {
+          value.text(val);
+
+          heatmap(dataArray[val], divId, pixelSize);
+        });
+
+      let gStep = d3.select("#" + divId)
+        .append('svg')
+        .attr('width', 500)
+        .attr('height', 100)
+        .append('g')
+        .attr('transform', 'translate(30,30)');
+
+      gStep.call(slider);
+
+      value.text(slider.value());
 
     }
 
