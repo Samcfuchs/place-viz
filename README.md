@@ -1,7 +1,7 @@
 # HW5: r/Place Analysis
 
 *Amy Liu (al996), Faris Aziz (fsa22), Julia Atkins (jea255), Sam Fuchs
-(scf73)*
+(scf73), Massimo Carbone ()*
 
 ## Data Sources
 
@@ -59,3 +59,12 @@ values.
 ### Visualization
 - [ ] Reverse preprocessing
 - [ ] Build framework for main place viz (Julia)
+
+## Presentation Notes
+
+- Consider wiping interaction for Massimo's window thing
+- Link changing heatmaps to the line graph of activity
+- Increase resolution of the heatmap time slider
+- More views into the canvas itself
+- Enable the user to ask more "why" questions
+- Explain some insights in text
