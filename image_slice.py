@@ -2,18 +2,18 @@ from sklearn.datasets import load_sample_image
 import numpy as np
 from PIL import Image
 
-t = 2 # Type
-c = 2 # Quadrant
+t = 1 # Type
+c = 1 # Quadrant
 
-png_name = "2-1649080746.png" # Pick a png
+png_name = "1-1649002755.png" # Pick a png
 
 # x1 and y1 are top left corner, x2 and y2 are bottom right corner
-x1 = 540
-y1 = 1733-1000
-x2 = 714
-y2 = 1947-1000
+x1 = 1832-1000
+y1 = 665
+x2 = 1888-1000
+y2 = 714
 
-output_name = "Dutch-66" # Final name
+output_name = "Minecraft-66" # Final name
 
 if t==0:
     name1 = "data/img_2022/images_single/"
