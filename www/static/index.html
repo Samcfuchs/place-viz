@@ -51,10 +51,22 @@
         consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas
         fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed
         cras.</p>
-      <div class="smallmults">
+      <div>
+        <svg id="expo7" width="900" height="100"></svg>
+      </div>
+      <div class="smallmults hist">
         <svg id="expo4" width="440" height="300"></svg>
         <svg id="expo5" width="440" height="300"></svg>
       </div>
+
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo
+        viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus
+        ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet
+        non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at
+        consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas
+        fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed
+        cras.</p>
 
     </div>
 
@@ -159,8 +171,9 @@
         .attr("y", height + margin.bottom)
         .text("Time");
 
+      // Credit: Legend based on https://bl.ocks.org/dianaow/0da76b59a7dffe24abcfa55d5b9e163e
       let legend = chart.append('g')
-        .attr('class', 'gLegend')
+        .attr('class', 'legend')
         .attr("transform", "translate(" + (width - 40) + "," + 5 + ")");
 
       legend.append("rect")
@@ -203,7 +216,7 @@
         .x(d => timeScale(d['min_from_zero']))
         .y(d => countScale(d['count']))
 
-      chart.append("path")
+      let line = chart.append("path")
         .datum(data_reg)
         .attr("class", "line")
         .attr("fill", "none")
@@ -211,6 +224,84 @@
         .attr("stroke-width", 1)
         .attr("d", lineGen);
 
+      // Credit: Tooltip based on https://bl.ocks.org/dianaow/0da76b59a7dffe24abcfa55d5b9e163e
+      let tooltip = chart.append("div")
+        .attr('id', svgId + 'tooltip')
+        .style('position', 'absolute')
+        .style("background-color", "#D3D3D3")
+        .style('padding', 6)
+        .style('display', 'none')
+
+      let lineStroke = "2px";
+
+      let mouseG = chart.append("g")
+        .attr("class", svgId + "mouse-over-effects");
+
+      mouseG.append("path")
+        .attr("class", svgId + "mouse-line")
+        .style("stroke", "#A9A9A9")
+        .style("stroke-width", lineStroke)
+        .style("opacity", "0");
+
+      let mousePerLine = mouseG.append("g")
+        .attr("class", svgId + "mouse-per-line");
+
+      mousePerLine.append("circle")
+        .attr("r", 4)
+        .style("stroke", color)
+        .style("fill", "none")
+        .style("stroke-width", lineStroke)
+        .style("opacity", "0");
+
+      mouseG.append('svg:rect')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('fill', 'none')
+        .attr('pointer-events', 'all')
+        .on('mouseout', function () {
+          d3.select("." + svgId + "mouse-line")
+            .style("opacity", "0");
+          d3.selectAll("." + svgId + "mouse-per-line circle")
+            .style("opacity", "0");
+          d3.selectAll("." + svgId + "mouse-per-line text")
+            .style("opacity", "0");
+          d3.selectAll("#" + svgId + "tooltip")
+            .style('display', 'none')
+
+        })
+        .on('mouseover', function () {
+          d3.select("." + svgId + "mouse-line")
+            .style("opacity", "1");
+          d3.selectAll("." + svgId + "mouse-per-line circle")
+            .style("opacity", "1");
+          d3.selectAll("#" + svgId + "tooltip")
+            .style('display', 'block')
+        })
+        .on('mousemove', event => {
+          let mouse = d3.pointer(event);
+
+          let time = timeScale.invert(mouse[0])
+          let bisect = d3.bisector(function (d) { return d['min_from_zero']; }).left
+          let idx = bisect(data, time);
+          idx = idx < 0 ? 0 : (idx >= data.length ? data.length - 1 : idx);
+
+          d3.selectAll("." + svgId + "mouse-line")
+            .attr("d", function () {
+              let d = "M" + timeScale(data[idx]['min_from_zero']) + "," + (height);
+              d += " " + timeScale(data[idx]['min_from_zero']) + "," + 0;
+              return d;
+            });
+
+          d3.selectAll("." + svgId + "mouse-per-line")
+            .attr("transform", "translate(" + mouse[0] + "," + countScale(data[idx]['count']) + ")");
+
+          // TODO: not working yet, wip
+          tooltip.html(data[idx]['count'])
+            .style('display', 'block')
+            .style('left', mouse[0] + 20)
+            .style('top', mouse[1] - 20)
+            .style('font-size', 11.5);
+        });
     }
 
     async function tileschartmultiple(data1, data2, svgId, color1, color2, category1, category2) {
@@ -281,7 +372,7 @@
         .text("Time");
 
       let legend = chart.append('g')
-        .attr('class', 'gLegend')
+        .attr('class', 'legend')
         .attr("transform", "translate(" + (width - 40) + "," + 0 + ")");
 
       legend.append("rect")
@@ -321,7 +412,6 @@
         .attr("y", 20 + radius / 2)
         .style("font-size", 12)
         .text(category2);
-
 
       loessRegression1 = d3.regressionLoess()
         .x(d => d['min_from_zero'])
@@ -374,11 +464,12 @@
     }
 
     async function histogram(data, svgId, color) {
-
       data.forEach(d => {
-        d['posts'] = parseInt(d['posts']);
+        d["users"] = parseInt(d["users"]);
+        d["posts"] = parseInt(d["posts"]);
       })
-      data = data.filter(d => d['posts'] < 51);
+      let num_bins = 50;
+      data = data.filter(d => d['posts'] <= num_bins);
 
       const svg = d3.select("#" + svgId);
       const margin = { top: 10, right: 10, bottom: 65, left: 80 };
@@ -392,14 +483,8 @@
       const postExtent = d3.extent(data, d => d['posts']);
       const postScale = d3.scaleLinear().domain(postExtent).range([0, width]);
 
-      let histogram = d3.histogram()
-        .value(function (d) { return d['posts']; })
-        .domain(postScale.domain())
-        .thresholds(postScale.ticks(50));
 
-      let bins = histogram(data);
-
-      const userExtent = [0, d3.max(bins, function (d) { return d.length; })];
+      const userExtent = d3.extent(data, d => d['users']);
       const userScale = d3.scaleLinear().domain(userExtent).range([height, 0]);
 
       let leftAxis = d3.axisLeft(userScale)
@@ -414,10 +499,10 @@
       let leftGridlines = d3.axisLeft(userScale)
         .tickSize(-width - 10)
         .tickFormat("");
-      let bottomAxis = d3.axisBottom(postScale)
+      let bottomAxis = d3.axisBottom(postScale);
       let bottomGridlines = d3.axisBottom(postScale)
         .tickSize(-height - 10)
-        .tickFormat("")
+        .tickFormat("");
 
       annotations.append("g")
         .attr("class", "y axis")
@@ -451,15 +536,112 @@
         .attr("y", height + margin.bottom)
         .text("# of Posts");
 
+
+      // Bars
       svg.selectAll("rect")
-        .data(bins)
+        .data(data)
         .enter()
         .append("rect")
-        .attr("x", 1)
-        .attr("transform", function (d) { return "translate(" + (margin.left + postScale(d.x0)) + "," + (margin.top + userScale(d.length)) + ")"; })
-        .attr("width", function (d) { return postScale(d.x1) == postScale(d.x0) ? 0 : postScale(d.x1) - postScale(d.x0) - 1; })
-        .attr("height", function (d) { return height - userScale(d.length); })
+        .attr("users", d => d["users"])
+        .attr("num_posts", d => d["posts"])
+        .attr("x", d => margin.left + postScale(d["posts"]))
+        .attr("y", d => margin.top + userScale(d["users"]))
+        .attr("width", 5)
+        .attr("height", d => height - userScale(d['users']))
         .style("fill", color);
+    }
+
+    async function barCompare(data1, data2, svgId) {
+      let data1_sum = 1166924
+      let data2_sum = 10381164
+
+      const svg = d3.select("#" + svgId);
+      const margin = { top: 10, right: 150, bottom: 20, left: 20 };
+      const width = svg.attr("width") - margin.left - margin.right;
+      const height = svg.attr("height") - margin.top - margin.bottom;
+
+
+      const postExtent = [0, 10381164];
+      const postScale = d3.scaleLinear()
+        .domain(postExtent)
+        .range([0, width])
+
+
+
+      // Bars
+      svg
+        .append("rect")
+        .attr("class", "2017users")
+        .attr("number", data1_sum)
+        .attr("x", margin.left)
+        .attr("y", margin.top)
+        .attr("width", postScale(data1_sum))
+        .attr("height", height / 2)
+        .style("fill", color_17);
+
+      svg
+        .append("rect")
+        .attr("class", "2022users")
+        .attr("number", data2_sum)
+        .attr("x", margin.left)
+        .attr("y", margin.top + margin.top + (height / 2))
+        .attr("width", postScale(data2_sum))
+        .attr("height", height / 2)
+        .style("fill", color_22);
+
+      let annotations = svg.append("g").attr("id", svgId + "annotations");
+
+      annotations.append("text")
+        .attr("class", "inbarcount")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline', "middle")
+        .attr("x", margin.left + 10)
+        .attr("y", height / 2 - 5)
+        .style("fill", "white")
+        .text("2017");
+
+      annotations.append("text")
+        .attr("class", "inbarsubtext")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline', "middle")
+        .attr("x", postScale(data1_sum) + margin.left + 5)
+        .attr("y", height / 2)
+        .style("fill", color_17)
+        .text("unique users");
+      annotations.append("text")
+        .attr("class", "inbarcount")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline', "middle")
+        .attr("x", postScale(data1_sum) + margin.left + 5)
+        .attr("y", height / 2 - 15)
+        .style("fill", color_17)
+        .text(data1_sum.toLocaleString("en-US"));
+
+      annotations.append("text")
+        .attr("class", "inbarcount")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline', "middle")
+        .attr("x", margin.left + 10)
+        .attr("y", height + 5)
+        .style("fill", "white")
+        .text("2022");
+
+      annotations.append("text")
+        .attr("class", "inbarcount")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline', "middle")
+        .attr("x", postScale(data2_sum) + margin.left + 5)
+        .attr("y", height)
+        .style("fill", color_22)
+        .text(data2_sum.toLocaleString("en-US"));
+      annotations.append("text")
+        .attr("class", "inbarsubtext")
+        .attr("text-anchor", "start")
+        .attr('dominant-baseline', "middle")
+        .attr("x", postScale(data2_sum) + margin.left + 5)
+        .attr("y", height + 15)
+        .style("fill", color_22)
+        .text("unique users");
     }
 
 
@@ -539,6 +721,8 @@
         });
     }
 
+
+
     /**
      * When adding a key point, make sure to also call:
      *      heatmap(<data>, <heatmapname>, <pixelSize>);
@@ -549,6 +733,8 @@
       title = "Canadian Flag",
       divname = "canada",
       heatmapname = "canadianflag",
+      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."],
+      ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."]],
       paragraph1 = "In a comical turn of events, what began as a collaborative effort between those at r/Canada to create a depiction of the Canadian flag turned into a failed attempt at drawing a maple leaf that spanned nearly the entirety of r/place\’\s existence. Canada\’\s flag quickly became the target of memes as their leaf was never quite in shape. This led to constant vandalism of the flag. At one point, the flag was changed to yellow and the leaf changed to a banana. Canada managed to gain a little progress on their leaf, however the canvas ended before it could be fully completed.",
       paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
     )
@@ -557,6 +743,9 @@
       title = "French Flag",
       divname = "france",
       heatmapname = "frenchflag",
+      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed."],
+      ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."],
+      ["image3.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."]],
       paragraph1 = "With what originally began as a large French flag in the lower left hand corner, this collaborative effort by the folks behind r/France eventually evolved into beautiful recreations of the Eiffel Tower, Arc de Triomphe, the Louvre, and even Remy from Ratatouille! The Void tried its best to take over but r/France prevailed and eventually held one of the largest cohesive squares on the map.",
       paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
     )
@@ -565,6 +754,8 @@
       title = "Dutch Paintings",
       divname = "dutch",
       heatmapname = "dutchpaintings",
+      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."],
+      ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."]],
       paragraph1 = "An incredibly accurate recreation of very famous dutch paintings such as Vermeer\’\s \“\Girl with a Pearl Earring\”\, Rembrandt’\s\ \“\The Night Watch\”\, and a famous painting depicting Michael de Ruyter\’\s naval battle, a source of immense pride for the Netherlands. In addition, the users at r/placeNL decided to help out those at r/canada in producing a Canadian flag for them, an interesting reflection of the relationship between Canada and Netherlands stemming from WW2 where Canadian troops were among the first to liberate many occupied Dutch cities.",
       paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
     )
@@ -573,6 +764,8 @@
       title = "Creeper Animation",
       divname = "creeper",
       heatmapname = "creeperanimation",
+      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."],
+      ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."]],
       paragraph1 = "This is where the Minecraft loading screen animation took place, which was one of the most upvoted posts on r/place. The animation was created by streamers NymN and Zoil.",
       paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
     )
@@ -581,6 +774,8 @@
       title = "The Void",
       divname = "void",
       heatmapname = "voidmap",
+      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."],
+      ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."]],
       paragraph1 = "\“\The Void\”\ refers to several distorted images and art present nearly at all times of r/place\’\s existence, especially as many griefers would try their best to destroy art around the canvas. In addition, The Void, in its final moments, was a large area of black pixels consuming art wherever it spread. After the main void was destroyed by The First Hand, it moved up TotalBiscuit\’\s hair and reformed right before the canvas ended. Created by The Swarm.",
       paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
     )
@@ -596,13 +791,13 @@
 
     const requestData = async () => {
 
-      let tileData2017 = await d3.csv("../data/2017_time_data.csv");
+      let tileData2017 = await d3.csv("data/2017_time_data.csv");
       tileData2017.forEach(d => {
         d['count'] = parseInt(d['count']);
         d['min_from_zero'] = parseInt(d['min_from_zero']);
       })
 
-      let tileData2022 = await d3.csv("../data/2022_time_data.csv");
+      let tileData2022 = await d3.csv("data/2022_time_data.csv");
       tileData2022.forEach(d => {
         d['count'] = parseInt(d['count']);
         d['min_from_zero'] = parseInt(d['min_from_zero']);
@@ -613,27 +808,30 @@
       tileschart(tileData2022, 'expo3', color_22, 2022);
 
       // TODO: replace testData with real data
-      const canadianflagData = await d3.text("../data/test1.csv");
-      heatmap(csvToArray(canadianflagData), 'canadianflag', 10);
+      // const canadianflagData = await d3.text("../data/test1.csv");
+      // heatmap(csvToArray(canadianflagData), 'canadianflag', 10);
 
-      const frenchflagData = await d3.text("../data/test1.csv");
-      heatmap(csvToArray(frenchflagData), 'frenchflag', 1);
+      // const frenchflagData = await d3.text("../data/test1.csv");
+      // heatmap(csvToArray(frenchflagData), 'frenchflag', 1);
 
-      const dutchData = await d3.text("../data/test1.csv");
-      heatmap(csvToArray(dutchData), 'dutchpaintings', 1);
+      // const dutchData = await d3.text("../data/test1.csv");
+      // heatmap(csvToArray(dutchData), 'dutchpaintings', 1);
 
-      const creeperData = await d3.text("../data/test2.csv");
-      heatmap(csvToArray(creeperData), 'creeperanimation', 1);
+      // const creeperData = await d3.text("../data/test2.csv");
+      // heatmap(csvToArray(creeperData), 'creeperanimation', 1);
 
-      const voidData = await d3.text("../data/test2.csv");
-      heatmap(csvToArray(voidData), 'voidmap', 10);
+      // const voidData = await d3.text("../data/test2.csv");
+      // heatmap(csvToArray(voidData), 'voidmap', 10);
 
 
-      let userData2017 = await d3.csv("../data/2017_user_data.csv");
+      let userData2017 = await d3.csv("data/2017_user_data.csv");
       histogram(userData2017, 'expo4', color_17);
 
-      let userData2022 = await d3.csv("../data/2022_user_data.csv");
+      let userData2022 = await d3.csv("data/2022_user_data.csv");
       histogram(userData2022, 'expo5', color_22);
+
+      barCompare(userData2017, userData2022, "expo7")
+
     }
 
 

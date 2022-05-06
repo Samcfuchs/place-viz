@@ -28,8 +28,20 @@ input[type="range"] {
   justify-content: center;
 }
 
+.test1 {
+  background-color: blue;
+  position: absolute;
+}
+
+.test2 {
+  background-color: red;
+  transform: translate(0, 0);
+  position: relative;
+}
+
 .center p {
   max-width: 900px;
+  margin-bottom: 20px;
 }
 
 button {
@@ -42,6 +54,24 @@ svg {
   margin: auto 10px;
   display: block;
   border-radius: 10px;
+}
+
+#expo7 {
+  border: none;
+}
+
+img {
+  width: 200px;
+  height: 200px;
+}
+
+.inbarcount,
+.inbarlabel {
+  font-weight: bold;
+}
+
+.inbarcount {
+  font-size: 14pt;
 }
 
 .buttons {
@@ -61,8 +91,9 @@ svg {
   justify-content: center;
 }
 
+
 .center * {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .case * {
@@ -80,7 +111,7 @@ svg {
 }
 
 #keypoints {
-  margin-top: -30px;
+  margin-top: 10px;
   margin-left: -10px;
 }
 
@@ -116,7 +147,7 @@ li::marker {
   text-align: left;
   margin-bottom: 50px;
   margin-left: 20px;
-  margin-top: -55px;
+  margin-top: 10px;
 }
 
 .expo {
@@ -165,4 +196,25 @@ canvas {
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
+}
+
+.imgandtext {
+  display: flex;
+  flex-direction: row;
+}
+
+.imgandtext p {
+  width: 100%;
+}
+
+.imgandtext * {
+  margin: 10px;
+}
+
+.imgandtext img {
+  object-fit: cover;
+}
+
+.reverse {
+  flex-flow: row-reverse;
 }
