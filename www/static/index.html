@@ -78,9 +78,8 @@
       <h2>Highlights</h2>
       <ol>
         <li><a href="#canada">Canadian Flag</a></li>
-        <li><a href="#france">France</a></li>
         <li><a href="#dutch">Dutch Paintings</a></li>
-        <li><a href="#creeper">Creeper Animation</a></li>
+        <li><a href="#creeper">Minecraft Animation</a></li>
         <li><a href="#void">The Void</a></li>
       </ol>
     </nav>
@@ -740,17 +739,6 @@
     )
 
     addKeypoint(
-      title = "French Flag",
-      divname = "france",
-      heatmapname = "frenchflag",
-      imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed."],
-      ["image2.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."],
-      ["image3.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."]],
-      paragraph1 = "With what originally began as a large French flag in the lower left hand corner, this collaborative effort by the folks behind r/France eventually evolved into beautiful recreations of the Eiffel Tower, Arc de Triomphe, the Louvre, and even Remy from Ratatouille! The Void tried its best to take over but r/France prevailed and eventually held one of the largest cohesive squares on the map.",
-      paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
-    )
-
-    addKeypoint(
       title = "Dutch Paintings",
       divname = "dutch",
       heatmapname = "dutchpaintings",
@@ -761,7 +749,7 @@
     )
 
     addKeypoint(
-      title = "Creeper Animation",
+      title = "Minecraft Loading Screen Animation",
       divname = "creeper",
       heatmapname = "creeperanimation",
       imglist = [["image1.jpg", "This is a picture of my dog, Benny. He is a very good boy. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."],
@@ -808,20 +796,17 @@
       tileschart(tileData2022, 'expo3', color_22, 2022);
 
       // TODO: replace testData with real data
-      // const canadianflagData = await d3.text("../data/test1.csv");
-      // heatmap(csvToArray(canadianflagData), 'canadianflag', 10);
+      const canadianflagData = await d3.text("../data/canada_norm_updates_100.csv");
+      heatmap(csvToArray(canadianflagData), 'canadianflag', 10);
 
-      // const frenchflagData = await d3.text("../data/test1.csv");
-      // heatmap(csvToArray(frenchflagData), 'frenchflag', 1);
+      const dutchData = await d3.text("../data/dutch_norm_updates_100.csv");
+      heatmap(csvToArray(dutchData), 'dutchpaintings', 2);
 
-      // const dutchData = await d3.text("../data/test1.csv");
-      // heatmap(csvToArray(dutchData), 'dutchpaintings', 1);
+      const creeperData = await d3.text("../data/minecraft_n_updates_100.csv");
+      heatmap(csvToArray(creeperData), 'creeperanimation', 10);
 
-      // const creeperData = await d3.text("../data/test2.csv");
-      // heatmap(csvToArray(creeperData), 'creeperanimation', 1);
-
-      // const voidData = await d3.text("../data/test2.csv");
-      // heatmap(csvToArray(voidData), 'voidmap', 10);
+      const voidData = await d3.text("../data/void_n_updates_100.csv");
+      heatmap(csvToArray(voidData), 'voidmap', 2);
 
 
       let userData2017 = await d3.csv("data/2017_user_data.csv");
