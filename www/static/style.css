@@ -28,19 +28,20 @@ input[type="range"] {
   justify-content: center;
 }
 
-.test1{
+.test1 {
   background-color: blue;
   position: absolute;
 }
 
-.test2{
+.test2 {
   background-color: red;
-  transform: translate(0,0);
+  transform: translate(0, 0);
   position: relative;
 }
 
 .center p {
   max-width: 900px;
+  margin-bottom: 20px;
 }
 
 button {
@@ -55,19 +56,21 @@ svg {
   border-radius: 10px;
 }
 
-#expo7{
+#expo7 {
   border: none;
 }
 
-img{
+img {
   width: 200px;
   height: 200px;
 }
 
-.inbarcount, .inbarlabel{
+.inbarcount,
+.inbarlabel {
   font-weight: bold;
 }
-.inbarcount{
+
+.inbarcount {
   font-size: 14pt;
 }
 
@@ -90,7 +93,7 @@ img{
 
 
 .center * {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .case * {
@@ -108,7 +111,7 @@ img{
 }
 
 #keypoints {
-  margin-top: -30px;
+  margin-top: 10px;
   margin-left: -10px;
 }
 
@@ -144,7 +147,7 @@ li::marker {
   text-align: left;
   margin-bottom: 50px;
   margin-left: 20px;
-  margin-top: -55px;
+  margin-top: 10px;
 }
 
 .expo {
@@ -195,19 +198,23 @@ canvas {
   pointer-events: none;
 }
 
-.imgandtext{
+.imgandtext {
   display: flex;
   flex-direction: row;
 }
-.imgandtext p{
+
+.imgandtext p {
   width: 100%;
 }
-.imgandtext *{
+
+.imgandtext * {
   margin: 10px;
 }
-.imgandtext img{
+
+.imgandtext img {
   object-fit: cover;
 }
-.reverse{
+
+.reverse {
   flex-flow: row-reverse;
 }
