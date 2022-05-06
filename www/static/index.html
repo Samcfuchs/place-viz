@@ -677,11 +677,13 @@
         .interpolator(d3.interpolateViridis)
         .domain([min, max])
 
-      let canvas = d3.select("#" + divId)
-        .append('canvas')
+      let div = d3.select("#" + divId);
+      div.selectAll("#" + divId + "canvas").remove();
+
+      let canvas = div.append('canvas')
         .attr('width', width)
         .attr('height', height)
-        .attr('id', divId + 'canvas')
+        .attr('id', divId + 'canvas');
 
       let context = canvas.node().getContext('2d');
 
@@ -721,30 +723,15 @@
     }
 
     async function heatmapOverTime(dataArray, divId, pixelSize) {
-      let value = d3.select("#" + divId)
-        .append('p')
-        .attr('id', divId + 'value-step')
 
-      let slider = d3.sliderBottom()
-        .min(0)
-        .max(dataArray.length - 1)
-        .width(300)
-        .on('onchange', val => {
-          value.text(val);
+      let div = document.getElementById(divId)
+      div.innerHTML += "<input type='range' style='width:10em' id='" + divId + "slider' name='" + divId + "slider' min='0' max='" + (dataArray.length - 1) + "' value='0'>";
 
-          heatmap(dataArray[val], divId, pixelSize);
-        });
-
-      let gStep = d3.select("#" + divId)
-        .append('svg')
-        .attr('width', 500)
-        .attr('height', 100)
-        .append('g')
-        .attr('transform', 'translate(30,30)');
-
-      gStep.call(slider);
-
-      value.text(slider.value());
+      let slider = document.querySelector("#" + divId + "slider");
+      heatmap(dataArray[slider.value], divId, pixelSize);
+      slider.addEventListener('input', function () {
+        heatmap(dataArray[slider.value], divId, pixelSize);
+      });
 
     }
 
@@ -834,25 +821,25 @@
       const canadianflagData66 = await d3.text("../data/canada_norm_updates_66.csv");
       const canadianflagData100 = await d3.text("../data/canada_norm_updates_100.csv");
       const canadaDataArr = [csvToArray(canadianflagData33), csvToArray(canadianflagData66), csvToArray(canadianflagData100)]
-      heatmap(canadaDataArr[2], 'canadianflag', 10);
+      heatmapOverTime(canadaDataArr, 'canadianflag', 10);
 
       const dutchData33 = await d3.text("../data/dutch_norm_updates_33.csv");
       const dutchData66 = await d3.text("../data/dutch_norm_updates_66.csv");
       const dutchData100 = await d3.text("../data/dutch_norm_updates_100.csv");
       const dutchDataArr = [csvToArray(dutchData33), csvToArray(dutchData66), csvToArray(dutchData100)]
-      heatmap(dutchDataArr[2], 'dutchpaintings', 2);
+      heatmapOverTime(dutchDataArr, 'dutchpaintings', 2);
 
       const minecraftData33 = await d3.text("../data/minecraft_n_updates_33.csv");
       const minecraftData66 = await d3.text("../data/minecraft_n_updates_66.csv");
       const minecraftData100 = await d3.text("../data/minecraft_n_updates_100.csv");
       const minecraftDataArr = [csvToArray(minecraftData33), csvToArray(minecraftData66), csvToArray(minecraftData100)]
-      heatmap(minecraftDataArr[2], 'creeperanimation', 10);
+      heatmapOverTime(minecraftDataArr, 'creeperanimation', 10);
 
       const voidData33 = await d3.text("../data/void_n_updates_33.csv");
       const voidData66 = await d3.text("../data/void_norm_updates_66.csv");
       const voidData100 = await d3.text("../data/void_norm_updates_100.csv");
       const voidDataArr = [csvToArray(voidData33), csvToArray(voidData66), csvToArray(voidData100)]
-      heatmap(voidDataArr[2], 'voidmap', 2);
+      heatmapOverTime(voidDataArr, 'voidmap', 2);
 
     }
 
