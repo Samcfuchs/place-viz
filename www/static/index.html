@@ -159,8 +159,9 @@
         .attr("y", height + margin.bottom)
         .text("Time");
 
+      // Credit: Legend based on https://bl.ocks.org/dianaow/0da76b59a7dffe24abcfa55d5b9e163e
       let legend = chart.append('g')
-        .attr('class', 'gLegend')
+        .attr('class', 'legend')
         .attr("transform", "translate(" + (width - 40) + "," + 5 + ")");
 
       legend.append("rect")
@@ -203,13 +204,86 @@
         .x(d => timeScale(d['min_from_zero']))
         .y(d => countScale(d['count']))
 
-      chart.append("path")
+      let line = chart.append("path")
         .datum(data_reg)
         .attr("class", "line")
         .attr("fill", "none")
         .attr("stroke", color)
         .attr("stroke-width", 1)
         .attr("d", lineGen);
+
+      // Credit: Tooltip based on https://bl.ocks.org/dianaow/0da76b59a7dffe24abcfa55d5b9e163e
+      let tooltip = chart.append("div")
+        .attr('id', svgId + 'tooltip')
+        .style('position', 'absolute')
+        .style("background-color", "#D3D3D3")
+        .style('padding', 6)
+        .style('display', 'none')
+
+      let lineStroke = "2px";
+
+      let mouseG = chart.append("g")
+        .attr("class", "mouse-over-effects");
+
+      mouseG.append("path")
+        .attr("class", "mouse-line")
+        .style("stroke", "#A9A9A9")
+        .style("stroke-width", lineStroke)
+        .style("opacity", "0");
+
+      let mousePerLine = mouseG.append("g")
+        .attr("class", "mouse-per-line");
+
+      mousePerLine.append("circle")
+        .attr("r", 4)
+        .style("stroke", color)
+        .style("fill", "none")
+        .style("stroke-width", lineStroke)
+        .style("opacity", "0");
+
+      mouseG.append('svg:rect')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('fill', 'none')
+        .attr('pointer-events', 'all')
+        .on('mouseout', function () {
+          d3.select(".mouse-line")
+            .style("opacity", "0");
+          d3.selectAll(".mouse-per-line circle")
+            .style("opacity", "0");
+          d3.selectAll(".mouse-per-line text")
+            .style("opacity", "0");
+          d3.selectAll("#" + svgId + "tooltip")
+            .style('display', 'none')
+
+        })
+        .on('mouseover', function () {
+          d3.select(".mouse-line")
+            .style("opacity", "1");
+          d3.selectAll(".mouse-per-line circle")
+            .style("opacity", "1");
+          d3.selectAll("#" + svgId + "tooltip")
+            .style('display', 'block')
+        })
+        .on('mousemove', function () {
+          var mouse = d3.mouse(this);
+
+          // d3.selectAll(".mouse-per-line")
+          //   .attr("transform", function (d, i) {
+
+          //     d3.select(".mouse-line")
+          //       .attr("d", function () {
+          //         let data = "M" + xScale(d.values[idx].date) + "," + (height);
+          //         data += " " + xScale(d.values[idx].date) + "," + 0;
+          //         return data;
+          //       });
+          //     return "translate(" + xScale(d.values[idx].date) + "," + yScale(d.values[idx].premium) + ")";
+
+          //   });
+
+          // updateTooltipContent(mouse, res_nested)
+
+        });
 
     }
 
@@ -281,7 +355,7 @@
         .text("Time");
 
       let legend = chart.append('g')
-        .attr('class', 'gLegend')
+        .attr('class', 'legend')
         .attr("transform", "translate(" + (width - 40) + "," + 0 + ")");
 
       legend.append("rect")
@@ -321,7 +395,6 @@
         .attr("y", 20 + radius / 2)
         .style("font-size", 12)
         .text(category2);
-
 
       loessRegression1 = d3.regressionLoess()
         .x(d => d['min_from_zero'])
