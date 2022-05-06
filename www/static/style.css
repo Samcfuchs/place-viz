@@ -55,6 +55,22 @@ svg {
   border-radius: 10px;
 }
 
+#expo7{
+  border: none;
+}
+
+img{
+  width: 200px;
+  height: 200px;
+}
+
+.inbarcount, .inbarlabel{
+  font-weight: bold;
+}
+.inbarcount{
+  font-size: 14pt;
+}
+
 .buttons {
   width: 1090px;
   /* must be width and margins of top svgs */
@@ -71,6 +87,7 @@ svg {
   flex-direction: column;
   justify-content: center;
 }
+
 
 .center * {
   margin-bottom: 20px;
@@ -176,4 +193,21 @@ canvas {
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
+}
+
+.imgandtext{
+  display: flex;
+  flex-direction: row;
+}
+.imgandtext p{
+  width: 100%;
+}
+.imgandtext *{
+  margin: 10px;
+}
+.imgandtext img{
+  object-fit: cover;
+}
+.reverse{
+  flex-flow: row-reverse;
 }
