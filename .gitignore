@@ -16,3 +16,5 @@ test.csv
 
 # Data files
 !www/static/data/*.csv
+
+data/*.zip
