@@ -239,16 +239,16 @@
       let lineStroke = "2px";
 
       let mouseG = chart.append("g")
-        .attr("class", "mouse-over-effects");
+        .attr("class", svgId + "mouse-over-effects");
 
       mouseG.append("path")
-        .attr("class", "mouse-line")
+        .attr("class", svgId + "mouse-line")
         .style("stroke", "#A9A9A9")
         .style("stroke-width", lineStroke)
         .style("opacity", "0");
 
       let mousePerLine = mouseG.append("g")
-        .attr("class", "mouse-per-line");
+        .attr("class", svgId + "mouse-per-line");
 
       mousePerLine.append("circle")
         .attr("r", 4)
@@ -263,44 +263,43 @@
         .attr('fill', 'none')
         .attr('pointer-events', 'all')
         .on('mouseout', function () {
-          d3.select(".mouse-line")
+          d3.select("." + svgId + "mouse-line")
             .style("opacity", "0");
-          d3.selectAll(".mouse-per-line circle")
+          d3.selectAll("." + svgId + "mouse-per-line circle")
             .style("opacity", "0");
-          d3.selectAll(".mouse-per-line text")
+          d3.selectAll("." + svgId + "mouse-per-line text")
             .style("opacity", "0");
           d3.selectAll("#" + svgId + "tooltip")
             .style('display', 'none')
 
         })
         .on('mouseover', function () {
-          d3.select(".mouse-line")
+          d3.select("." + svgId + "mouse-line")
             .style("opacity", "1");
-          d3.selectAll(".mouse-per-line circle")
+          d3.selectAll("." + svgId + "mouse-per-line circle")
             .style("opacity", "1");
           d3.selectAll("#" + svgId + "tooltip")
             .style('display', 'block')
         })
-        .on('mousemove', function () {
-          var mouse = d3.mouse(this);
+        .on('mousemove', event => {
+          let mouse = d3.pointer(event);
 
-          // d3.selectAll(".mouse-per-line")
-          //   .attr("transform", function (d, i) {
+          let time = timeScale.invert(mouse[0])
+          let bisect = d3.bisector(function (d) { return d['min_from_zero']; }).left
+          let idx = bisect(data, time);
+          idx = idx < 0 ? 0 : (idx >= data.length ? data.length - 1 : idx);
 
-          //     d3.select(".mouse-line")
-          //       .attr("d", function () {
-          //         let data = "M" + xScale(d.values[idx].date) + "," + (height);
-          //         data += " " + xScale(d.values[idx].date) + "," + 0;
-          //         return data;
-          //       });
-          //     return "translate(" + xScale(d.values[idx].date) + "," + yScale(d.values[idx].premium) + ")";
 
-          //   });
+          d3.selectAll("." + svgId + "mouse-line")
+            .attr("d", function () {
+              let d = "M" + timeScale(data[idx]['min_from_zero']) + "," + (height);
+              d += " " + timeScale(data[idx]['min_from_zero']) + "," + 0;
+              return d;
+            });
 
-          // updateTooltipContent(mouse, res_nested)
-
+          d3.selectAll("." + svgId + "mouse-per-line")
+            .attr("transform", "translate(" + mouse[0] + "," + countScale(data[idx]['count']) + ")");
         });
-
     }
 
     async function tileschartmultiple(data1, data2, svgId, color1, color2, category1, category2) {
@@ -562,25 +561,23 @@
 
       const postExtent = [0, 10381164];
       const postScale = d3.scaleLinear()
-      .domain(postExtent)
-      .range([0, width])      
+        .domain(postExtent)
+        .range([0, width])
 
 
 
-  // Bars
+      // Bars
       svg
         .append("rect")
         .attr("class", "2017users")
-        .attr("number",data1_sum)
-        .attr("x", margin.left ) 
-        .attr("y", margin.top ) 
+        .attr("number", data1_sum)
+        .attr("x", margin.left)
+        .attr("y", margin.top)
         .attr("width", postScale(data1_sum))
         .attr("height", height/2) 
         .style("fill", color_17);
 
-        console.log(postExtent)
-
-    svg
+      svg
         .append("rect")
         .attr("class", "2022users")
         .attr("number",data2_sum)
@@ -831,7 +828,7 @@
       let userData2022 = await d3.csv("data/2022_user_data.csv");
       histogram(userData2022, 'expo5', color_22);
 
-      barCompare(userData2017,userData2022, "expo7")
+      barCompare(userData2017, userData2022, "expo7")
 
     }
 
