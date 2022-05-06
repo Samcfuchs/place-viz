@@ -289,7 +289,6 @@
           let idx = bisect(data, time);
           idx = idx < 0 ? 0 : (idx >= data.length ? data.length - 1 : idx);
 
-
           d3.selectAll("." + svgId + "mouse-line")
             .attr("d", function () {
               let d = "M" + timeScale(data[idx]['min_from_zero']) + "," + (height);
@@ -299,6 +298,13 @@
 
           d3.selectAll("." + svgId + "mouse-per-line")
             .attr("transform", "translate(" + mouse[0] + "," + countScale(data[idx]['count']) + ")");
+
+          // TODO: not working yet, wip
+          tooltip.html(data[idx]['count'])
+            .style('display', 'block')
+            .style('left', mouse[0] + 20)
+            .style('top', mouse[1] - 20)
+            .style('font-size', 11.5);
         });
     }
 
