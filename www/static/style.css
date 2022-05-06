@@ -200,11 +200,23 @@ canvas {
 
 .imgandtext {
   display: flex;
+  flex-direction: column;
+  width: 350px;
+  margin: 10px;
+}
+
+.gallery{
+  display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .imgandtext p {
-  width: 100%;
+  width: 80%;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 10px;
 }
 
 .imgandtext * {
@@ -213,6 +225,7 @@ canvas {
 
 .imgandtext img {
   object-fit: cover;
+  margin: 0 auto;
 }
 
 .reverse {
