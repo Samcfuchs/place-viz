@@ -720,7 +720,10 @@
         });
     }
 
+    async function heatmapOverTime(dataArray, divId, pixelSize) {
 
+
+    }
 
     /**
      * When adding a key point, make sure to also call:
@@ -736,7 +739,7 @@
       ["Canada_Germans.png", "Many Canada flag memes spouted from this."],
       ["Canada_Wales.png", ""]],
       paragraph1 = "In a comical turn of events, what began as a collaborative effort between those at r/Canada to create a depiction of the Canadian flag turned into a failed attempt at drawing a maple leaf that spanned nearly the entirety of r/place\’\s existence. Canada\’\s flag quickly became the target of memes as their leaf was never quite in shape. This led to constant vandalism of the flag. At one point, the flag was changed to yellow and the leaf changed to a banana. Canada managed to gain a little progress on their leaf, however the canvas ended before it could be fully completed.",
-      paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
+      paragraph2 = ""
     )
 
     addKeypoint(
@@ -794,31 +797,6 @@
       tileschart(tileData2017, 'expo2', color_17, 2017);
       tileschart(tileData2022, 'expo3', color_22, 2022);
 
-      // TODO: replace testData with real data
-      const canadianflagData33 = await d3.text("../data/canada_norm_updates_33.csv");
-      const canadianflagData66 = await d3.text("../data/canada_norm_updates_66.csv");
-      const canadianflagData100 = await d3.text("../data/canada_norm_updates_100.csv");
-      const canadaDataArr = [canadianflagData33, canadianflagData66, canadianflagData100]
-      heatmap(csvToArray(canadaDataArr[2]), 'canadianflag', 10);
-
-      const dutchData33 = await d3.text("../data/dutch_norm_updates_33.csv");
-      const dutchData66 = await d3.text("../data/dutch_norm_updates_66.csv");
-      const dutchData100 = await d3.text("../data/dutch_norm_updates_100.csv");
-      const dutchDataArr = [dutchData33, dutchData66, dutchData100]
-      heatmap(csvToArray(dutchDataArr[2]), 'dutchpaintings', 2);
-
-      const minecraftData33 = await d3.text("../data/minecraft_n_updates_33.csv");
-      const minecraftData66 = await d3.text("../data/minecraft_n_updates_66.csv");
-      const minecraftData100 = await d3.text("../data/minecraft_n_updates_100.csv");
-      const minecraftDataArr = [minecraftData33, minecraftData66, minecraftData100]
-      heatmap(csvToArray(minecraftDataArr[2]), 'creeperanimation', 10);
-
-      const voidData33 = await d3.text("../data/void_n_updates_33.csv");
-      const voidData66 = await d3.text("../data/void_norm_updates_66.csv");
-      const voidData100 = await d3.text("../data/void_norm_updates_100.csv");
-      const voidDataArr = [voidData33, voidData66, voidData100]
-      heatmap(csvToArray(voidDataArr[2]), 'voidmap', 2);
-
 
       let userData2017 = await d3.csv("data/2017_user_data.csv");
       histogram(userData2017, 'expo4', color_17);
@@ -826,7 +804,32 @@
       let userData2022 = await d3.csv("data/2022_user_data.csv");
       histogram(userData2022, 'expo5', color_22);
 
-      barCompare(userData2017, userData2022, "expo7")
+      barCompare(userData2017, userData2022, "expo7");
+
+      // TODO: replace testData with real data
+      const canadianflagData33 = await d3.text("../data/canada_norm_updates_33.csv");
+      const canadianflagData66 = await d3.text("../data/canada_norm_updates_66.csv");
+      const canadianflagData100 = await d3.text("../data/canada_norm_updates_100.csv");
+      const canadaDataArr = [csvToArray(canadianflagData33), csvToArray(canadianflagData66), csvToArray(canadianflagData100)]
+      heatmap(canadaDataArr[2], 'canadianflag', 10);
+
+      const dutchData33 = await d3.text("../data/dutch_norm_updates_33.csv");
+      const dutchData66 = await d3.text("../data/dutch_norm_updates_66.csv");
+      const dutchData100 = await d3.text("../data/dutch_norm_updates_100.csv");
+      const dutchDataArr = [csvToArray(dutchData33), csvToArray(dutchData66), csvToArray(dutchData100)]
+      heatmap(dutchDataArr[2], 'dutchpaintings', 2);
+
+      const minecraftData33 = await d3.text("../data/minecraft_n_updates_33.csv");
+      const minecraftData66 = await d3.text("../data/minecraft_n_updates_66.csv");
+      const minecraftData100 = await d3.text("../data/minecraft_n_updates_100.csv");
+      const minecraftDataArr = [csvToArray(minecraftData33), csvToArray(minecraftData66), csvToArray(minecraftData100)]
+      heatmap(minecraftDataArr[2], 'creeperanimation', 10);
+
+      const voidData33 = await d3.text("../data/void_n_updates_33.csv");
+      const voidData66 = await d3.text("../data/void_norm_updates_66.csv");
+      const voidData100 = await d3.text("../data/void_norm_updates_100.csv");
+      const voidDataArr = [csvToArray(voidData33), csvToArray(voidData66), csvToArray(voidData100)]
+      heatmap(voidDataArr[2], 'voidmap', 2);
 
     }
 
