@@ -448,13 +448,11 @@
 
     async function histogram(data, svgId, color) {
       data.forEach(d => {
-        d["users"] = parseInt(d["posts"]);
-        d['posts'] = parseInt(d[""]);
-        console.log(d["posts"])
+        d["users"] = parseInt(d["users"]);
+        d["posts"] = parseInt(d["posts"]);
       })
-      let bin_num = 50
-      data = data.filter(d => d['posts'] <= bin_num);
-      console.log(data)
+      let num_bins = 50;
+      data = data.filter(d => d['posts'] <= num_bins);
 
       const svg = d3.select("#" + svgId);
       const margin = { top: 10, right: 10, bottom: 65, left: 80 };
@@ -466,14 +464,10 @@
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       const postExtent = d3.extent(data, d => d['posts']);
-      const postScale = d3.scaleBand()
-      .domain(data.map(d=>d['posts']))
-      .range([0, width])
-      .padding(0.2);
-      
+      const postScale = d3.scaleLinear().domain(postExtent).range([0, width]);
+
 
       const userExtent = d3.extent(data, d => d['users']);
-      console.log(userExtent)
       const userScale = d3.scaleLinear().domain(userExtent).range([height, 0]);
 
       let leftAxis = d3.axisLeft(userScale)
@@ -488,10 +482,10 @@
       let leftGridlines = d3.axisLeft(userScale)
         .tickSize(-width - 10)
         .tickFormat("");
-      let bottomAxis = d3.axisBottom(postScale)
-      let bottomGridlines = d3.axisBottom(postScale).ticks(bin_num)
+      let bottomAxis = d3.axisBottom(postScale);
+      let bottomGridlines = d3.axisBottom(postScale)
         .tickSize(-height - 10)
-        .tickFormat("")
+        .tickFormat("");
 
       annotations.append("g")
         .attr("class", "y axis")
@@ -526,17 +520,17 @@
         .text("# of Posts");
 
 
-  // Bars
+      // Bars
       svg.selectAll("rect")
         .data(data)
         .enter()
         .append("rect")
-        .attr("users", d=> d["users"])
-        .attr("num_posts", d=> d["posts"])
-        .attr("x", d=> postScale(d["posts"]) ) 
-        .attr("y", d=> userScale(d["users"]) ) 
-        .attr("width", postScale.bandwidth())
-        .attr("height", d => height - userScale(d['users']) )
+        .attr("users", d => d["users"])
+        .attr("num_posts", d => d["posts"])
+        .attr("x", d => margin.left + postScale(d["posts"]))
+        .attr("y", d => margin.top + userScale(d["users"]))
+        .attr("width", 5)
+        .attr("height", d => height - userScale(d['users']))
         .style("fill", color);
     }
 
