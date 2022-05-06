@@ -796,17 +796,29 @@
       tileschart(tileData2022, 'expo3', color_22, 2022);
 
       // TODO: replace testData with real data
-      const canadianflagData = await d3.text("../data/canada_norm_updates_100.csv");
-      heatmap(csvToArray(canadianflagData), 'canadianflag', 10);
+      const canadianflagData33 = await d3.text("../data/canada_norm_updates_33.csv");
+      const canadianflagData66 = await d3.text("../data/canada_norm_updates_66.csv");
+      const canadianflagData100 = await d3.text("../data/canada_norm_updates_100.csv");
+      const canadaDataArr = [canadianflagData33, canadianflagData66, canadianflagData100]
+      heatmap(csvToArray(canadaDataArr[2]), 'canadianflag', 10);
 
-      const dutchData = await d3.text("../data/dutch_norm_updates_100.csv");
-      heatmap(csvToArray(dutchData), 'dutchpaintings', 2);
+      const dutchData33 = await d3.text("../data/dutch_norm_updates_33.csv");
+      const dutchData66 = await d3.text("../data/dutch_norm_updates_66.csv");
+      const dutchData100 = await d3.text("../data/dutch_norm_updates_100.csv");
+      const dutchDataArr = [dutchData33, dutchData66, dutchData100]
+      heatmap(csvToArray(dutchDataArr[2]), 'dutchpaintings', 2);
 
-      const creeperData = await d3.text("../data/minecraft_n_updates_100.csv");
-      heatmap(csvToArray(creeperData), 'creeperanimation', 10);
+      const minecraftData33 = await d3.text("../data/minecraft_n_updates_33.csv");
+      const minecraftData66 = await d3.text("../data/minecraft_n_updates_66.csv");
+      const minecraftData100 = await d3.text("../data/minecraft_n_updates_100.csv");
+      const minecraftDataArr = [minecraftData33, minecraftData66, minecraftData100]
+      heatmap(csvToArray(minecraftDataArr[2]), 'creeperanimation', 10);
 
-      const voidData = await d3.text("../data/void_n_updates_100.csv");
-      heatmap(csvToArray(voidData), 'voidmap', 2);
+      const voidData33 = await d3.text("../data/void_n_updates_33.csv");
+      const voidData66 = await d3.text("../data/void_norm_updates_66.csv");
+      const voidData100 = await d3.text("../data/void_norm_updates_100.csv");
+      const voidDataArr = [voidData33, voidData66, voidData100]
+      heatmap(csvToArray(voidDataArr[2]), 'voidmap', 2);
 
 
       let userData2017 = await d3.csv("data/2017_user_data.csv");
