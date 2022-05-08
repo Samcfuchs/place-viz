@@ -16,12 +16,12 @@
 
 
 <style type="text/css">
-.frontimg{
+  .frontimg {
     position: absolute;
   }
 
-  .backimg{
-    transform: translate(0,0);
+  .backimg {
+    transform: translate(0, 0);
     position: relative;
   }
 </style>
@@ -113,17 +113,21 @@
   </div>
   <div>
     <svg class="frontimg" height="500" width="500">
-      <image xlink:href="https://gistcdn.githack.com/massimocarbone/16d0190aa6c4084f9c276c5f79e52f52/raw/5809c97bce6188714ef8f79d07cc61c1152ef357/canada.svg" class="frontimg" width="500" height="500" />
+      <image
+        xlink:href="https://gistcdn.githack.com/massimocarbone/16d0190aa6c4084f9c276c5f79e52f52/raw/5809c97bce6188714ef8f79d07cc61c1152ef357/canada.svg"
+        class="frontimg" width="500" height="500" />
     </svg>
     <svg class="backimg" height="500" width="500">
       <defs>
         <clipPath id="mask">
-          <circle id="mask-circle" cx="50%" cy="50%" r="8%" style="fill: #ffffff"/>
+          <circle id="mask-circle" cx="50%" cy="50%" r="8%" style="fill: #ffffff" />
         </clipPath>
       </defs>
       <g clip-path="url(#mask)">
-        <rect width="100%" height="100%" fill="#272730"/>
-        <image xlink:href="https://gistcdn.githack.com/massimocarbone/caf065693c770dafec3572f6ddd43f63/raw/4418887eb0e73bfdfaad8e664d06f17a736d8772/back.svg" width="100%" height="100%" />
+        <rect width="100%" height="100%" fill="#272730" />
+        <image
+          xlink:href="https://gistcdn.githack.com/massimocarbone/caf065693c770dafec3572f6ddd43f63/raw/4418887eb0e73bfdfaad8e664d06f17a736d8772/back.svg"
+          width="100%" height="100%" />
       </g>
       <circle id="circle-shadow" cx="50%" cy="50%" r="8%" style="stroke: #fff; fill: transparent; stroke-width: 5;" />
     </svg>
@@ -265,8 +269,12 @@
       let mouseG = chart.append("g")
         .attr("class", svgId + "mouse-over-effects");
 
-      mouseG.append("path")
+      mouseG.append("line")
         .attr("class", svgId + "mouse-line")
+        .attr('x1', 0)
+        .attr('y1', 0)
+        .attr('x2', 0)
+        .attr('y2', height)
         .style("stroke", "#A9A9A9")
         .style("stroke-width", lineStroke)
         .style("opacity", "0");
@@ -314,11 +322,8 @@
           idx = idx < 0 ? 0 : (idx >= data.length ? data.length - 1 : idx);
 
           d3.selectAll("." + svgId + "mouse-line")
-            .attr("d", function () {
-              let d = "M" + timeScale(data[idx]['min_from_zero']) + "," + (height);
-              d += " " + timeScale(data[idx]['min_from_zero']) + "," + 0;
-              return d;
-            });
+            .attr("x1", mouse[0])
+            .attr("x2", mouse[0]);
 
           d3.selectAll("." + svgId + "mouse-per-line")
             .attr("transform", "translate(" + mouse[0] + "," + countScale(data[idx]['count']) + ")");
@@ -489,6 +494,99 @@
         .attr("stroke-width", 2)
         .attr("d", lineGenr2);
 
+      // Credit: Tooltip based on https://bl.ocks.org/dianaow/0da76b59a7dffe24abcfa55d5b9e163e
+      let tooltip = chart.append("div")
+        .attr('id', svgId + 'tooltip')
+        .style('position', 'absolute')
+        .style("background-color", "#D3D3D3")
+        .style('padding', 6)
+        .style('display', 'none')
+
+      let lineStroke = "2px";
+
+      let mouseG = chart.append("g")
+        .attr("class", svgId + "mouse-over-effects");
+
+      mouseG.append("line")
+        .attr("class", svgId + "mouse-line")
+        .attr('x1', 0)
+        .attr('y1', 0)
+        .attr('x2', 0)
+        .attr('y2', height)
+        .style("stroke", "#A9A9A9")
+        .style("stroke-width", lineStroke)
+        .style("opacity", "0");
+
+      let mousePerLine = mouseG.append("g")
+        .attr("class", svgId + "mouse-per-line");
+
+      mousePerLine.append("circle")
+        .attr("r", 4)
+        .attr("id", svgId + "mouse1")
+        .style("stroke", color1)
+        .style("fill", "none")
+        .style("stroke-width", lineStroke)
+        .style("opacity", "0");
+      mousePerLine.append("circle")
+        .attr("r", 4)
+        .attr("id", svgId + "mouse2")
+        .style("stroke", color2)
+        .style("fill", "none")
+        .style("stroke-width", lineStroke)
+        .style("opacity", "0");
+
+      mouseG.append('svg:rect')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('fill', 'none')
+        .attr('pointer-events', 'all')
+        .on('mouseout', function () {
+          d3.select("." + svgId + "mouse-line")
+            .style("opacity", "0");
+          d3.selectAll("." + svgId + "mouse-per-line circle")
+            .style("opacity", "0");
+          d3.selectAll("." + svgId + "mouse-per-line text")
+            .style("opacity", "0");
+          d3.selectAll("#" + svgId + "tooltip")
+            .style('display', 'none')
+
+        })
+        .on('mouseover', function () {
+          d3.select("." + svgId + "mouse-line")
+            .style("opacity", "1");
+          d3.selectAll("." + svgId + "mouse-per-line circle")
+            .style("opacity", "1");
+          d3.selectAll("#" + svgId + "tooltip")
+            .style('display', 'block')
+        })
+        .on('mousemove', event => {
+          let mouse = d3.pointer(event);
+
+          let time = timeScale.invert(mouse[0])
+          let bisect = d3.bisector(function (d) { return d['min_from_zero']; }).left;
+          let idx1 = bisect(data1, time);
+          idx1 = idx1 < 0 ? 0 : (idx1 >= data1.length ? data1.length - 1 : idx1);
+          let idx2 = bisect(data2, time);
+          idx2 = idx2 < 0 ? 0 : (idx2 >= data2.length ? data2.length - 1 : idx2);
+
+          d3.selectAll("." + svgId + "mouse-line")
+            .attr("x1", mouse[0])
+            .attr("x2", mouse[0]);
+
+          d3.select("#" + svgId + "mouse1")
+            .attr("transform", "translate(" + mouse[0] + "," + countScale(data1[idx1]['count']) + ")");
+
+          d3.select("#" + svgId + "mouse2")
+            .attr("transform", "translate(" + mouse[0] + "," + countScale(data2[idx2]['count']) + ")");
+
+          // TODO: not working yet, wip
+          tooltip.html(data1[idx1]['count'])
+            .style('display', 'block')
+            .style('left', mouse[0] + 20)
+            .style('top', mouse[1] - 20)
+            .style('font-size', 11.5);
+
+        });
     }
 
     async function histogram(data, svgId, color) {
@@ -562,7 +660,7 @@
         .attr("text-anchor", "end")
         .attr("x", width / 2 + margin.left)
         .attr("y", height + margin.bottom)
-        .text("# of Posts");
+        .text("# of Changes");
 
 
       // Bars
@@ -881,39 +979,39 @@
     requestData();
   </script>
   <script type="text/javascript">
-  
-var svgElement = document.querySelector('svg');
-var maskedElement = document.querySelector('#mask-circle');
-var circleFeedback = document.querySelector('#circle-shadow');
-var svgPoint = svgElement.createSVGPoint();
 
-function cursorPoint(e, svg) {
-    svgPoint.x = e.clientX;
-    svgPoint.y = e.clientY;
-    return svgPoint.matrixTransform(svg.getScreenCTM().inverse());
-}
+    var svgElement = document.querySelector('svg');
+    var maskedElement = document.querySelector('#mask-circle');
+    var circleFeedback = document.querySelector('#circle-shadow');
+    var svgPoint = svgElement.createSVGPoint();
 
-function update(svgCoords) {
-    maskedElement.setAttribute('cx', svgCoords.x);
-    maskedElement.setAttribute('cy', svgCoords.y);
-    circleFeedback.setAttribute('cx', svgCoords.x);
-    circleFeedback.setAttribute('cy', svgCoords.y);
-}
-
-window.addEventListener('mousemove', function(e) {
-  update(cursorPoint(e, svgElement));
-}, false);
-
-document.addEventListener('touchmove', function(e) {
-    e.preventDefault();
-    var touch = e.targetTouches[0];
-    if (touch) {
-        update(cursorPoint(touch, svgElement));
+    function cursorPoint(e, svg) {
+      svgPoint.x = e.clientX;
+      svgPoint.y = e.clientY;
+      return svgPoint.matrixTransform(svg.getScreenCTM().inverse());
     }
-}, false);
+
+    function update(svgCoords) {
+      maskedElement.setAttribute('cx', svgCoords.x);
+      maskedElement.setAttribute('cy', svgCoords.y);
+      circleFeedback.setAttribute('cx', svgCoords.x);
+      circleFeedback.setAttribute('cy', svgCoords.y);
+    }
+
+    window.addEventListener('mousemove', function (e) {
+      update(cursorPoint(e, svgElement));
+    }, false);
+
+    document.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+      var touch = e.targetTouches[0];
+      if (touch) {
+        update(cursorPoint(touch, svgElement));
+      }
+    }, false);
 
 
-</script>
+  </script>
 </body>
 
 </html>
