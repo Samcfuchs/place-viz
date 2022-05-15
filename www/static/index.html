@@ -91,7 +91,6 @@
       <h2>Highlights</h2>
       <ol>
         <li><a href="#canada">Canadian Flag</a></li>
-        <li><a href="#dutch">Dutch Paintings</a></li>
         <li><a href="#creeper">Minecraft Animation</a></li>
         <li><a href="#void">The Void</a></li>
       </ol>
@@ -797,8 +796,6 @@
           color.opacity = 0.5;
           return color + "";
         });
-
-      console.log(data.length);
     }
 
     async function heatmapOverTime(dataArray, divId, pixelSize) {
@@ -888,15 +885,6 @@
     )
 
     addKeypoint(
-      title = "Dutch Paintings",
-      divname = "dutch",
-      heatmapname = "dutchpaintings",
-      imglist = [],
-      paragraph1 = "An incredibly accurate recreation of very famous dutch paintings such as Vermeer\’\s \“\Girl with a Pearl Earring\”\, Rembrandt’\s\ \“\The Night Watch\”\, and a famous painting depicting Michael de Ruyter\’\s naval battle, a source of immense pride for the Netherlands. In addition, the users at r/placeNL decided to help out those at r/canada in producing a Canadian flag for them, an interesting reflection of the relationship between Canada and Netherlands stemming from WW2 where Canadian troops were among the first to liberate many occupied Dutch cities.",
-      paragraph2 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras."
-    )
-
-    addKeypoint(
       title = "Minecraft Loading Screen Animation",
       divname = "creeper",
       heatmapname = "creeperanimation",
@@ -957,12 +945,6 @@
       const canadianflagData100 = await d3.text("data/canada_norm_updates_100.csv");
       const canadaDataArr = [csvToArray(canadianflagData33), csvToArray(canadianflagData66), csvToArray(canadianflagData100)]
       heatmapOverTime(canadaDataArr, 'canadianflag', 10);
-
-      const dutchData33 = await d3.text("data/dutch_norm_updates_33.csv");
-      const dutchData66 = await d3.text("data/dutch_norm_updates_66.csv");
-      const dutchData100 = await d3.text("data/dutch_norm_updates_100.csv");
-      const dutchDataArr = [csvToArray(dutchData33), csvToArray(dutchData66), csvToArray(dutchData100)]
-      heatmapOverTime(dutchDataArr, 'dutchpaintings', 2);
 
       const minecraftData33 = await d3.text("data/minecraft_norm_updates_33.csv");
       const minecraftData66 = await d3.text("data/minecraft_norm_updates_66.csv");
