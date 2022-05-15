@@ -796,53 +796,6 @@
           color.opacity = 0.5;
           return color + "";
         });
-
-      // let canvas = div.select("#" + divId + "canvas");
-      // canvas.remove();
-
-      // canvas = div.append('canvas')
-      //   .attr('width', width)
-      //   .attr('height', height)
-      //   .attr('id', divId + 'canvas');
-
-      // let context = canvas.node().getContext('2d');
-
-      // let gray = d3.color("gray");
-      // gray.opacity = 0.5;
-
-      // // bind the data to canvas elements
-      // heatmap_changes.selectAll('changes.rect')
-      //   .data(data)
-      //   .enter()
-      //   .append('changes')
-      //   .attr('class', 'rect')
-      //   .attr("height", pixelSize)
-      //   .attr("width", pixelSize)
-      //   .attr("x", cell => { return cell.x * pixelSize })
-      //   .attr("y", cell => { return cell.y * pixelSize })
-      //   .attr("fillStyle", cell => {
-      //     let color = d3.color(heatmap_color(cell.value));
-      //     if (color) {
-      //       color.opacity = 0.5;
-      //       return color + "";
-      //     } else {
-      //       return gray + "";
-      //     }
-      //   });
-
-      // context.clearRect(0, 0, width, height);
-
-      // heatmap_changes.selectAll('changes.rect')
-      //   .each(function (d, i) {
-      //     let node = d3.select(this);
-      //     context.beginPath();
-      //     context.rect(node.attr('x'),
-      //       node.attr('y'),
-      //       node.attr('width'),
-      //       node.attr('height'));
-      //     context.fillStyle = node.attr('fillStyle');
-      //     context.fill();
-      //   });
     }
 
     async function heatmapOverTime(dataArray, divId, pixelSize) {
@@ -889,9 +842,6 @@
         .attr("width", width)
         .attr("height", height)
         .attr("id", "#" + divId + "svg");
-
-      // let changes = document.createElement('changes');
-      // let heatmap_changes = d3.select(changes);
 
       heatmap(data1DArray[0], svg, pixelSize, heatmap_color);
       slider.addEventListener('input', function () {
