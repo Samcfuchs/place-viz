@@ -1,7 +1,7 @@
 # HW5: r/Place Analysis
 
 *Amy Liu (al996), Faris Aziz (fsa22), Julia Atkins (jea255), Sam Fuchs
-(scf73), Massimo Carbone ()*
+(scf73), Massimo Carbone (mc2588)*
 
 ## Data Sources
 
