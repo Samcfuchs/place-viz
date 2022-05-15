@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="legend.js"></script>
+</head>
+<body>
+    <div>
+        <svg></svg>
+    </div>
+
+    <script>
+        let scale = d3.scaleSequential().domain([0,1]).interpolator(d3.interpolateViridis)
+        let svg = d3.select('svg')
+
+        console.log(legend)
+
+        legend(svg, {
+            color: scale, title: "test scale"
+        })
+
+    </script>
+</body>
+</html>
