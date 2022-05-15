@@ -780,84 +780,122 @@
      * 
      *  Credit: Adapted from https://jeffrz.github.io/info4310-sp2022/notes/22.04.25.notes.htm
      **/
-    async function heatmap(data, divId, pixelSize) {
+    async function heatmap(data, svg, pixelSize, heatmap_color) {
 
-      let width = data[0].length * pixelSize;
-      let height = data.length * pixelSize;
+      svg.selectAll("*").remove();
+      svg.selectAll()
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr("height", pixelSize)
+        .attr("width", pixelSize)
+        .attr("x", cell => { return cell.x * pixelSize })
+        .attr("y", cell => { return cell.y * pixelSize })
+        .attr("fill", cell => {
+          let color = d3.color(heatmap_color(cell.value));
+          color.opacity = 0.5;
+          return color + "";
+        });
 
-      let data1D = []
-      data.forEach((row, i) => {
-        row.forEach((val, j) => {
-          data1D.push({
-            'x': j,
-            'y': i % width,
-            'value': val
-          })
-        })
-      })
+      // let canvas = div.select("#" + divId + "canvas");
+      // canvas.remove();
 
-      calc1D = data.flat()
-      let min = d3.min(calc1D)
-      let max = d3.max(calc1D)
+      // canvas = div.append('canvas')
+      //   .attr('width', width)
+      //   .attr('height', height)
+      //   .attr('id', divId + 'canvas');
+
+      // let context = canvas.node().getContext('2d');
+
+      // let gray = d3.color("gray");
+      // gray.opacity = 0.5;
+
+      // // bind the data to canvas elements
+      // heatmap_changes.selectAll('changes.rect')
+      //   .data(data)
+      //   .enter()
+      //   .append('changes')
+      //   .attr('class', 'rect')
+      //   .attr("height", pixelSize)
+      //   .attr("width", pixelSize)
+      //   .attr("x", cell => { return cell.x * pixelSize })
+      //   .attr("y", cell => { return cell.y * pixelSize })
+      //   .attr("fillStyle", cell => {
+      //     let color = d3.color(heatmap_color(cell.value));
+      //     if (color) {
+      //       color.opacity = 0.5;
+      //       return color + "";
+      //     } else {
+      //       return gray + "";
+      //     }
+      //   });
+
+      // context.clearRect(0, 0, width, height);
+
+      // heatmap_changes.selectAll('changes.rect')
+      //   .each(function (d, i) {
+      //     let node = d3.select(this);
+      //     context.beginPath();
+      //     context.rect(node.attr('x'),
+      //       node.attr('y'),
+      //       node.attr('width'),
+      //       node.attr('height'));
+      //     context.fillStyle = node.attr('fillStyle');
+      //     context.fill();
+      //   });
+    }
+
+    async function heatmapOverTime(dataArray, divId, pixelSize) {
+
+      let sliderDiv = document.getElementById(divId);
+      sliderDiv.innerHTML += "<input type='range' style='width:10em' id='" + divId + "slider' name='" + divId + "slider' min='0' max='" + (dataArray.length - 1) + "' value='0'>";
+
+      let slider = document.querySelector("#" + divId + "slider");
+
+      // First snapshot's width & height
+      let width = dataArray[0][0].length * pixelSize;
+      let height = dataArray[0].length * pixelSize;
+
+      // Flattened array for each snapshot
+      let data1DArray = [];
+      let calc1DArray = [];
+      let min = Number.MAX_VALUE;
+      let max = 0;
+      for (let idx = 0; idx < dataArray.length; idx++) {
+        let data = dataArray[idx];
+        data1DArray.push([]);
+        data.forEach((row, i) => {
+          row.forEach((val, j) => {
+            data[i][j] = parseFloat(val);
+            data1DArray[idx].push({
+              'x': j,
+              'y': i % width,
+              'value': parseFloat(val)
+            });
+          });
+        });
+        let calc1D = dataArray[idx].flat();
+        calc1DArray.push(calc1D);
+        min = Math.min(min, d3.min(calc1D));
+        max = Math.max(max, d3.max(calc1D));
+      }
 
       let heatmap_color = d3.scaleSequential()
         .interpolator(d3.interpolateViridis)
         .domain([min, max])
 
-      let div = d3.select("#" + divId);
-      div.selectAll("#" + divId + "canvas").remove();
+      let svg = d3.select("#" + divId)
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("id", "#" + divId + "svg");
 
-      let canvas = div.append('canvas')
-        .attr('width', width)
-        .attr('height', height)
-        .attr('id', divId + 'canvas');
+      // let changes = document.createElement('changes');
+      // let heatmap_changes = d3.select(changes);
 
-      let context = canvas.node().getContext('2d');
-
-      // create a parent for all the elements
-      let changes = document.createElement('changes');
-      let heatmap = d3.select(changes);
-
-      //bind the data to canvas elements
-      heatmap.selectAll('changes.rect')
-        .data(data1D)
-        .enter()
-        .append('changes')
-        .attr('class', 'rect')
-        .attr("height", pixelSize)
-        .attr("width", pixelSize)
-        .attr("x", cell => { return cell.x * pixelSize })
-        .attr("y", cell => { return cell.y * pixelSize })
-        .attr("fillStyle", cell => {
-          let color = d3.color(heatmap_color(cell.value))
-          color.opacity = 0.5;
-          return color + "";
-        });
-
-      context.clearRect(0, 0, width, height);
-
-      heatmap.selectAll('changes.rect')
-        .each(function (d, i) {
-          let node = d3.select(this);
-          context.beginPath();
-          context.rect(node.attr('x'),
-            node.attr('y'),
-            node.attr('width'),
-            node.attr('height'));
-          context.fillStyle = node.attr('fillStyle');
-          context.fill();
-        });
-    }
-
-    async function heatmapOverTime(dataArray, divId, pixelSize) {
-
-      let div = document.getElementById(divId)
-      div.innerHTML += "<input type='range' style='width:10em' id='" + divId + "slider' name='" + divId + "slider' min='0' max='" + (dataArray.length - 1) + "' value='0'>";
-
-      let slider = document.querySelector("#" + divId + "slider");
-      heatmap(dataArray[slider.value], divId, pixelSize);
+      heatmap(data1DArray[0], svg, pixelSize, heatmap_color);
       slider.addEventListener('input', function () {
-        heatmap(dataArray[slider.value], divId, pixelSize);
+        heatmap(data1DArray[slider.value], svg, pixelSize, heatmap_color);
       });
 
     }
@@ -956,13 +994,13 @@
       const dutchDataArr = [csvToArray(dutchData33), csvToArray(dutchData66), csvToArray(dutchData100)]
       heatmapOverTime(dutchDataArr, 'dutchpaintings', 2);
 
-      const minecraftData33 = await d3.text("data/minecraft_n_updates_33.csv");
-      const minecraftData66 = await d3.text("data/minecraft_n_updates_66.csv");
-      const minecraftData100 = await d3.text("data/minecraft_n_updates_100.csv");
+      const minecraftData33 = await d3.text("data/minecraft_norm_updates_33.csv");
+      const minecraftData66 = await d3.text("data/minecraft_norm_updates_66.csv");
+      const minecraftData100 = await d3.text("data/minecraft_norm_updates_100.csv");
       const minecraftDataArr = [csvToArray(minecraftData33), csvToArray(minecraftData66), csvToArray(minecraftData100)]
       heatmapOverTime(minecraftDataArr, 'creeperanimation', 10);
 
-      const voidData33 = await d3.text("data/void_n_updates_33.csv");
+      const voidData33 = await d3.text("data/void_norm_updates_33.csv");
       const voidData66 = await d3.text("data/void_norm_updates_66.csv");
       const voidData100 = await d3.text("data/void_norm_updates_100.csv");
       const voidDataArr = [csvToArray(voidData33), csvToArray(voidData66), csvToArray(voidData100)]
