@@ -12,10 +12,6 @@
 <script src="keypoints.js"></script>
 <script src="anchornav.js"></script>
 
-
-<link href='https://fonts.googleapis.com/css?family=IBM Plex Sans Condensed' rel='stylesheet'>
-
-
 <style type="text/css">
   .frontimg {
     position: absolute;
@@ -860,6 +856,7 @@
         .append('svg')
         .attr('width', 360)
         .attr('height', 90)
+        .attr('class', 'slider')
         .append('g')
         .attr('transform', 'translate(30,30)');
 
@@ -926,7 +923,7 @@
         d['min_from_zero'] = parseInt(d['min_from_zero']);
       })
 
-      tileschartmultiple(tileData2017, tileData2022, 'expo1', color_17, color_22, 2017, 2018);
+      tileschartmultiple(tileData2017, tileData2022, 'expo1', color_17, color_22, 2017, 2022);
       tileschart(tileData2017, 'expo2', color_17, 2017);
       tileschart(tileData2022, 'expo3', color_22, 2022);
 
@@ -939,7 +936,6 @@
 
       barCompare(userData2017, userData2022, "expo7");
 
-      // TODO: replace testData with real data
       const canadianflagData33 = await d3.text("data/canada_norm_updates_33.csv");
       const canadianflagData66 = await d3.text("data/canada_norm_updates_66.csv");
       const canadianflagData100 = await d3.text("data/canada_norm_updates_100.csv");

@@ -56,6 +56,10 @@ svg {
   border-radius: 10px;
 }
 
+svg.slider {
+  border: 0px;
+}
+
 #expo7 {
   border: none;
 }
@@ -205,7 +209,7 @@ canvas {
   margin: 10px;
 }
 
-.gallery{
+.gallery {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -223,7 +227,7 @@ canvas {
   margin: 10px;
 }
 
-video{
+video {
   margin: 0 auto;
 }
 
@@ -236,13 +240,13 @@ video{
   flex-flow: row-reverse;
 }
 
-#dutch{
+#dutch {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-#dutch .pr{
+#dutch .pr {
   margin-left: 10px;
   width: 350px;
 }
