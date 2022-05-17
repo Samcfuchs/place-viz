@@ -35,31 +35,15 @@
 
     <div class="center">
       <p>
-        Starting on April 1, 2022, Reddit users collaboratively edited a 1000 pixel x 1000 pixel canvas on the r/place
-        subreddit. Each user was able to change the color of a single pixel with replacement from a limited palette with
-        5 minute pauses in between changes. The canvas doubled in size two times, eventually ending up 2000 pixel x 2000
-        pixel large. r/place had appeared before in 2017, but the volume of contributers in the 2022 r/place far
-        outshined its predecessor. Various groups, such as r/turkey, r/france, twitch audiences, etc. banded together to
+        On April 1, 2022, Reddit users across the world took part in a collaborative project and social experiment on
+        the subreddit r/place. Registered reddit users could choose from a limited color palette and place a single
+        colored pixel on a 1000 x 1000 pixel canvas. They would have to wait for a certain amount of time, between 5 to
+        20 minutes, before being able to place another pixel. This meant that redditors needed to collaborate with each
+        other to effectively create, defend, or attack images on the canvas. Various groups, such as r/turkey, r/canada,
+        twitch audiences, etc. banded together to
         leave their mark on the canvas.
       </p>
-      <div>
-        <h3>Number of changes to the canvas over time</h3>
-        <svg id="expo1" width="900" height="300"></svg>
-      </div>
 
-      <div class="smallmults">
-        <svg id="expo2" width="440" height="300"></svg>
-        <svg id="expo3" width="440" height="300"></svg>
-      </div>
-
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo
-        viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus
-        ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet
-        non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at
-        consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas
-        fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed
-        cras.</p>
       <div>
         <h3>Number of unique users</h3>
         <svg id="expo7" width="900" height="100"></svg>
@@ -69,14 +53,54 @@
         <svg id="expo5" width="440" height="300"></svg>
       </div>
 
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Mattis enim ut tellus elementum sagittis vitae et. Integer malesuada nunc vel risus commodo
-        viverra maecenas accumsan lacus. Leo vel fringilla est ullamcorper eget. Aliquet sagittis id consectetur purus
-        ut faucibus pulvinar elementum integer. Sed blandit libero volutpat sed cras ornare arcu dui. Lacus laoreet
-        non curabitur gravida arcu ac tortor. Risus quis varius quam quisque id diam vel quam elementum. Duis at
-        consectetur lorem donec massa sapien faucibus et. Sed odio morbi quis commodo odio aenean sed. Egestas egestas
-        fringilla phasellus faucibus scelerisque. Ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed
-        cras.</p>
+      <p>
+        This project had occurred once before on April 1, 2017 and drew the attention of over 1 million users. The
+        2022 edition drew even more popularity with over 10 million users over its four day timespan. While the 2017
+        version had a 16 color palette, the 2022 version gradually added 16 more colors to its palette. In addition, the
+        volume of changes and users eventually led to the 2022 canvas doubling in size 2 times, eventually ending up
+        2000 x 2000 pixels large.
+      </p>
+      <p>
+        As shown in the graphs above, while the volume of users in 2022 far surpassed that of 2017, the distribution of
+        contributions each user made was about the same. This means that the vast majority of users made 1 change to the
+        canvas. A large portion of this group of users is likely made up of the r/place lurkers and passbyers who placed
+        a pixel out of curiosity. The graphs also show a number of dedicated r/place contributors who made multiple
+        changes. As the number of changes increase, however, the number of users who made that amount of changes
+        decreases logrithmically. While there were users that made more than 50 changes, we limited the domain because
+        there were many users that made a small number of contributions and few users that made an extremely large
+        number of contributions, which would have created a skewed representation in the histogram. Because of the large
+        volume of changes and the fact that bots were a known problem on r/place, we suspect that the majority of users
+        with large amounts of contributions were bots.
+      </p>
+
+      <div>
+        <h3>Number of changes to the canvas over time</h3>
+        <svg id="expo1" width="900" height="300"></svg>
+      </div>
+
+      <p>
+        Again, the graph above emphasizes the difference in volume between 2017 r/place and 2022 r/place. It seems like
+        2022 had large variability in number of changes over time while 2017 did not, but that is simply because the
+        volume of changes in 2022 obscures the variability in number of changes over time in 2017. The graphs below
+        provide more clarification.
+      </p>
+
+      <div class="smallmults">
+        <svg id="expo2" width="440" height="300"></svg>
+        <svg id="expo3" width="440" height="300"></svg>
+      </div>
+      <p>
+        In 2017, r/place appeared on the internet for the first time. Its beginnings were marked by random pixel
+        placements and disordered attempts at creating distinguisable images on the canvas. As people became more
+        familiar with the rules behind the experiment, coordinated efforts by various subreddit communities began to
+        appear. This phenomenon is reflected on the left graph, showing how r/place started out with relatively few
+        contributions but with time, grew in popularity.
+        In 2022, on the other hand, r/place returned with a blaze of activity. Because it had already occurred 5 years
+        before, some people were already familiar with the mechanisms of the project and various subreddit communities
+        immediately started coordinating efforts to put their mark on the canvas. This is shown in the left graph by how
+        r/place started out with a large wave of contributions before leveling off more sustainable amounts.
+      </p>
+
 
     </div>
 
