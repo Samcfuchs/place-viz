@@ -633,7 +633,7 @@
 
           tooltipText1.text(category1 + ": " + data1[idx1]['count']);
           tooltipText2.text(category2 + ": " + data2[idx2]['count']);
-          tooltip.attr("transform", `translate(${(mouse[0] + 70)},${mouse[1] - 20})`);
+          tooltip.attr("transform", `translate(${(mouse[0] + 60)},${mouse[1] - 35})`);
 
         });
     }
@@ -711,19 +711,98 @@
         .attr("y", height + margin.bottom)
         .text("# of Changes");
 
+      let tooltipWidth = 50;
+      let tooltipHeight = 30;
+
+      let tooltip = chart.append("g")
+        .attr('id', svgId + 'tooltip')
+        .attr("visibility", "hidden")
+        .attr("class", "tooltip");
+
+      tooltip.append("rect")
+        .attr("fill", "lightgray")
+        .attr("opacity", 0.9)
+        .attr("x", -tooltipWidth / 2.0)
+        .attr("y", 0)
+        .attr("width", tooltipWidth)
+        .attr("height", tooltipHeight)
+      let tooltipText = tooltip.append("text")
+        .attr("fill", "black")
+        .attr("font-weight", "bold")
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "hanging")
+        .attr("x", 0)
+        .attr("y", 10);
+
+      // Credit: Tooltip Line based on https://bl.ocks.org/dianaow/0da76b59a7dffe24abcfa55d5b9e163e
+      let lineStroke = "2px";
+
+      let mouseG = chart.append("g")
+        .attr("class", svgId + "mouse-over-effects");
+
+      mouseG.append("line")
+        .attr("class", svgId + "mouse-line")
+        .attr('x1', 0)
+        .attr('y1', 0)
+        .attr('x2', 0)
+        .attr('y2', height)
+        .style("stroke", "#A9A9A9")
+        .style("stroke-width", lineStroke)
+        .style("opacity", "0");
+
+      let mousePerLine = mouseG.append("g")
+        .attr("class", svgId + "mouse-per-line");
+
+      mouseG.append('svg:rect')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('fill', 'none')
+        .attr('pointer-events', 'all')
+        .on('mouseout', function () {
+          d3.select("." + svgId + "mouse-line")
+            .style("opacity", "0");
+          d3.selectAll("." + svgId + "mouse-per-line text")
+            .style("opacity", "0");
+          tooltip.style("visibility", "hidden");
+        })
+        .on('mouseover', function () {
+          d3.select("." + svgId + "mouse-line")
+            .style("opacity", "1");
+          tooltip.style("visibility", "visible");
+        })
+        .on('mousemove', event => {
+          let mouse = d3.pointer(event);
+
+          let post = postScale.invert(mouse[0])
+          let bisect = d3.bisector(function (d) { return d['posts']; }).left
+          let idx = bisect(data, post);
+          idx = idx < 0 ? 0 : (idx >= data.length ? data.length - 1 : idx);
+
+          d3.selectAll("." + svgId + "mouse-line")
+            .attr("x1", mouse[0])
+            .attr("x2", mouse[0]);
+
+          d3.selectAll("." + svgId + "mouse-per-line")
+            .attr("transform", "translate(" + mouse[0] + "," + userScale(data[idx]['users']) + ")");
+
+          tooltipText.text(data[idx]['users']);
+          tooltip.attr("transform", `translate(${(mouse[0] + 30)},${mouse[1] - 20})`);
+        });
 
       // Bars
-      svg.selectAll("rect")
+      chart.selectAll(svgId + "rect")
         .data(data)
         .enter()
         .append("rect")
         .attr("users", d => d["users"])
         .attr("num_posts", d => d["posts"])
-        .attr("x", d => margin.left + postScale(d["posts"]))
-        .attr("y", d => margin.top + userScale(d["users"]))
+        .attr("x", d => postScale(d["posts"]))
+        .attr("y", d => userScale(d["users"]))
         .attr("width", 5)
         .attr("height", d => height - userScale(d['users']))
+        .attr("class", svgId + "rect")
         .style("fill", color);
+
     }
 
     async function barCompare(data1, data2, svgId) {
