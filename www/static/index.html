@@ -11,6 +11,7 @@
 <script src="https://d3js.org/d3.v6.min.js"></script>
 <script src="keypoints.js"></script>
 <script src="anchornav.js"></script>
+<script src="legend.js"></script>
 
 <style type="text/css">
   .frontimg {
@@ -789,7 +790,6 @@
         .attr("y", cell => { return cell.y * pixelSize })
         .attr("fill", cell => {
           let color = d3.color(heatmap_color(cell.value));
-          color.opacity = 0.5;
           return color + "";
         });
     }
@@ -828,6 +828,17 @@
         .interpolator(d3.interpolateViridis)
         .domain([min, max])
 
+      let heatmapLegend = d3.select("#" + divId)
+        .append("svg")
+        .attr('width', 360)
+        .attr('height', 90)
+        .attr('class', 'legend')
+        .attr("id", "#" + divId + "legend")
+
+      legend(heatmapLegend, {
+        color: heatmap_color, title: divId
+      });
+
       let svg = d3.select("#" + divId)
         .append("svg")
         .attr("width", width + 2)
@@ -841,7 +852,7 @@
         .sliderBottom()
         .min(0)
         .max(dataArray.length - 1)
-        .width(300)
+        .width(width - 60)
         .tickFormat(d3.format(""))
         .ticks(dataArray.length - 1)
         .step(1)
@@ -854,7 +865,7 @@
       var gStep = d3
         .select('#' + divId)
         .append('svg')
-        .attr('width', 360)
+        .attr('width', width)
         .attr('height', 90)
         .attr('class', 'slider')
         .append('g')

@@ -60,6 +60,10 @@ svg.slider {
   border: 0px;
 }
 
+svg.legend {
+  border: 0px;
+}
+
 #expo7 {
   border: none;
 }
