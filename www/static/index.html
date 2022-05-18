@@ -162,6 +162,7 @@
     async function tileschart(data, svgId, color, category) {
 
       const svg = d3.select("#" + svgId);
+      console.log(svgId)
       const margin = { top: 15, right: 15, bottom: 65, left: 80 };
       const width = svg.attr("width") - margin.left - margin.right;
       const height = svg.attr("height") - margin.top - margin.bottom;
@@ -170,6 +171,8 @@
       let chart = svg.append("g").attr("id", svgId + "points")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+        console.log(data)
       const countExtent = d3.extent(data, d => d['count']);
       const countScale = d3.scaleLinear().domain(countExtent).range([height, 0]);
       const timeExtent = d3.extent(data, d => d['min_from_zero']);
@@ -253,7 +256,7 @@
         .style("font-size", 12)
         .text(category);
 
-      loessRegression = d3.regressionLoess()
+        loessRegression = d3.regressionLoess()
         .x(d => d['min_from_zero'])
         .y(d => d['count'])
         .bandwidth(0.009);
@@ -276,6 +279,17 @@
         .attr("stroke", color)
         .attr("stroke-width", 1)
         .attr("d", lineGen);
+
+      let circles = chart.selectAll('.ufoCircle') 
+        .data(data) //attach the data
+        .enter().append('circle') 
+        .attr('class', 'point') 
+        .attr("class", d=>d.min_from_zero)
+        .attr("class", d=>d.count)
+        .attr('r', 2) 
+        .attr("cx", function(d) { return timeScale(d.min_from_zero); })
+        .attr("cy", function(d) { return countScale(d.count); });
+
 
       let tooltipWidth = 50;
       let tooltipHeight = 30;
@@ -366,6 +380,8 @@
           tooltip.attr("transform", `translate(${(mouse[0] + 30)},${mouse[1] - 20})`);
         });
     }
+
+
 
     async function tileschartmultiple(data1, data2, svgId, color1, color2, category1, category2) {
 
@@ -1065,9 +1081,17 @@
         d['min_from_zero'] = parseInt(d['min_from_zero']);
       })
 
+      let tileDataCanada = await d3.csv("data/cases/canada_time_cleaned.csv");
+      tileDataCanada.forEach(d => {
+        d['count'] = parseInt(d['count']);
+        d['min_from_zero'] = parseInt(d['min_from_zero']);
+      })
+
       tileschartmultiple(tileData2017, tileData2022, 'expo1', color_17, color_22, 2017, 2022);
       tileschart(tileData2017, 'expo2', color_17, 2017);
       tileschart(tileData2022, 'expo3', color_22, 2022);
+
+      tileschart(tileDataCanada, 'casecanada', color_22, 2022);
 
 
       let userData2017 = await d3.csv("data/2017_user_data.csv");
