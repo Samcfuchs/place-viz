@@ -10,7 +10,7 @@ function addKeypoint(title, divname, heatmapname, imglist, paragraph1, paragraph
     div.innerHTML += "<p>" + encodeHTML(paragraph1) + "</p>";
     div.innerHTML += "<div class='heatmap' id='" + heatmapname + "'></div>";
     div.innerHTML += "<p class='pr'>" + encodeHTML(paragraph2) + "</p>";
-    div.innerHTML += "<svg width=700 height=200 id='case" + divname + "'></svg>";
+    // div.innerHTML += "<svg width=700 height=200 id='case" + divname + "'></svg>";
     if (imglist.length > 0) {
         div.innerHTML += "<div class='gallery' id='gallery" + divname + "'></div>";
         let gal_div = document.getElementById('gallery' + divname);

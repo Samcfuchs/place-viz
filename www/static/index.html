@@ -443,6 +443,33 @@
         .attr('class', 'legend')
         .attr("transform", "translate(" + (width - 40) + "," + 0 + ")");
 
+      let anno = chart.append('g')
+        .attr('class', 'legend')
+        .attr("transform", "translate(" + (margin.left + 275) + "," + 145 + ")");
+
+      anno.append("rect")
+        .attr("class", "anno-background")
+        .attr("x", -12)
+        .attr("y", -5)
+        .attr("width", 250)
+        .attr("height", 35)
+        .style("fill", "white")
+        .style("stroke","darkgrey")
+        .style("stroke-width","2px");
+
+      anno.append("text")
+        .style("dominant-baseline","hanging")
+        .style("font-family","sans-serif")
+        .style("font-size","8pt")
+        .text("The dataset is missing information from roughly")
+
+      anno.append("text")
+        .attr("y","15px")
+        .style("dominant-baseline","hanging")
+        .style("font-family","sans-serif")
+        .style("font-size","8pt")
+        .text("2000 minutes - 4000 minutes past the first pixel.")
+
       legend.append("rect")
         .attr("class", "legend-background")
         .attr("x", -15)
@@ -1070,17 +1097,18 @@
         d['min_from_zero'] = parseInt(d['min_from_zero']);
       })
 
-      let tileDataCanada = await d3.csv("data/cases/canada_time_cleaned.csv");
-      tileDataCanada.forEach(d => {
-        d['count'] = parseInt(d['count']);
-        d['min_from_zero'] = parseInt(d['min_from_zero']);
-      })
 
       tileschartmultiple(tileData2017, tileData2022, 'expo1', color_17, color_22, 2017, 2022);
       tileschart(tileData2017, 'expo2', color_17, 2017);
       tileschart(tileData2022, 'expo3', color_22, 2022);
 
-      tileschart(tileDataCanada, 'casecanada', color_22, 2022);
+      
+      // let tileDataCanada = await d3.csv("data/cases/canada_time_cleaned.csv");
+      // tileDataCanada.forEach(d => {
+      //   d['count'] = parseInt(d['count']);
+      //   d['min_from_zero'] = parseInt(d['min_from_zero']);
+      // })
+      // tileschart(tileDataCanada, 'casecanada', color_22, 2022);
 
 
       let userData2017 = await d3.csv("data/2017_user_data.csv");
