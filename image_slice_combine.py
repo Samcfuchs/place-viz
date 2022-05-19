@@ -8,10 +8,10 @@ c = 2 # Quadrant
 png_name = "2-1649111825.png" # Pick a png
 
 # x1 and y1 are top left corner, x2 and y2 are bottom right corner
-x1 = 940
-y1 = 300
+x1 = 970
+y1 = 375
 x2 = 1000
-y2 = 700
+y2 = 475
 
 output_name = "Void-100" # Final name
 
@@ -37,7 +37,7 @@ png_name = "3-1649111825.png" # Pick a png
 
 # x1 and y1 are top left corner, x2 and y2 are bottom right corner
 x1 = 0
-x2 = 80
+x2 = 60
 
 if t==0:
     name1 = "data/img_2022/images_single/"
