@@ -27,6 +27,7 @@
 <body>
 
   <h1 class="center">r/place Analysis</h1>
+  <h4>Created by Julia Atkins, Faris Aziz, Massimo Carbone, Sam Fuchs, and Amy Liu</h4>
 
   <div class="container col">
     <video width="900" height="500" autoplay muted loop>
@@ -129,6 +130,43 @@
         </div> -->
 
 
+    </div>
+
+<!-- 
+https://www.reddit.com/r/place/comments/tykwb3/evolution_of_the_void_timelapse/
+https://www.reddit.com/r/place/comments/twh6br/what_an_incredible_ending/
+https://www.reddit.com/r/place/comments/tw9xn9/timelapse_of_canada_struggling_to_make_a_leaf_for/
+https://www.reddit.com/r/place/comments/tub8un/canada_still_struggling/
+https://www.reddit.com/r/place/comments/tvyiro/the_germans_are_showing_the_canadians_how_to_do_it/
+https://www.reddit.com/r/place/comments/tvoa0c/this_is_the_full_animation_of_the_minecraft/
+
+ -->
+
+    <div>
+      <h4>Credits and references</h4>
+      <p><a href="https://www.reddit.com/r/place/comments/tykwb3/evolution_of_the_void_timelapse/">
+        https://www.reddit.com/r/place/comments/tykwb3/evolution_of_the_void_timelapse/
+      </a></p>
+
+      <p><a href="https://www.reddit.com/r/place/comments/twh6br/what_an_incredible_ending/">
+        https://www.reddit.com/r/place/comments/twh6br/what_an_incredible_ending/
+      </a></p>
+
+      <p><a href="https://www.reddit.com/r/place/comments/tw9xn9/timelapse_of_canada_struggling_to_make_a_leaf_for/">
+        https://www.reddit.com/r/place/comments/tw9xn9/timelapse_of_canada_struggling_to_make_a_leaf_for/
+      </a></p>
+
+      <p><a href="https://www.reddit.com/r/place/comments/tub8un/canada_still_struggling/">
+        https://www.reddit.com/r/place/comments/tub8un/canada_still_struggling/
+      </a></p>
+
+      <p><a href="https://www.reddit.com/r/place/comments/tvyiro/the_germans_are_showing_the_canadians_how_to_do_it/">
+        https://www.reddit.com/r/place/comments/tvyiro/the_germans_are_showing_the_canadians_how_to_do_it/      
+      </a></p>
+
+      <p><a href="https://www.reddit.com/r/place/comments/tvoa0c/this_is_the_full_animation_of_the_minecraft/">
+        https://www.reddit.com/r/place/comments/tvoa0c/this_is_the_full_animation_of_the_minecraft/
+      </a></p>
     </div>
 
   </div>
@@ -1068,7 +1106,7 @@
         d['min_from_zero'] = parseInt(d['min_from_zero']);
       })
 
-      let tileData2022 = await d3.csv("data/2022_time_data.csv");
+      let tileData2022 = await d3.csv("data/2022_tiles_clean2.csv");
       tileData2022.forEach(d => {
         d['count'] = parseInt(d['count']);
         d['min_from_zero'] = parseInt(d['min_from_zero']);
