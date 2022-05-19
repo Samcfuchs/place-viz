@@ -27,7 +27,7 @@ gc.collect()
 # sample = diff[ :, 497:528, 175:244] #canada
 # sample = diff[188:3010, (1733-1000):(1947-1000), 540:714] #Dutch 
 # sample = diff[2262:2498, 665:714, (1832-1000):(1888-1000)] #Minecraft
-sample = diff[6:3010, 300:700, 940:1000]
+sample = diff[6:3010, 375:475, 970:1000]
 print(sample.shape)
 
 # This is the part that takes the longest
@@ -65,7 +65,7 @@ gc.collect()
 # sample = diff[ :, 497:528, 175:244] #canada
 # sample = diff[188:3010, (1733-1000):(1947-1000), 540:714] #Dutch 
 # sample = diff[2262:2498, 665:714, (1832-1000):(1888-1000)] #Minecraft
-sample = diff[6:3010, 300:700, 0:80]
+sample = diff[6:3010, 375:475, 0:60]
 print(sample.shape)
 
 # This is the part that takes the longest
