@@ -132,32 +132,18 @@
     </div>
 
   </div>
-  <div>
-    <svg class="frontimg" height="500" width="500">
-      <image
-        xlink:href="https://gistcdn.githack.com/massimocarbone/16d0190aa6c4084f9c276c5f79e52f52/raw/5809c97bce6188714ef8f79d07cc61c1152ef357/canada.svg"
-        class="frontimg" width="500" height="500" />
-    </svg>
-    <svg class="backimg" height="500" width="500">
-      <defs>
-        <clipPath id="mask">
-          <circle id="mask-circle" cx="50%" cy="50%" r="8%" style="fill: #ffffff" />
-        </clipPath>
-      </defs>
-      <g clip-path="url(#mask)">
-        <rect width="100%" height="100%" fill="#272730" />
-        <image
-          xlink:href="https://gistcdn.githack.com/massimocarbone/caf065693c770dafec3572f6ddd43f63/raw/4418887eb0e73bfdfaad8e664d06f17a736d8772/back.svg"
-          width="100%" height="100%" />
-      </g>
-      <circle id="circle-shadow" cx="50%" cy="50%" r="8%" style="stroke: #fff; fill: transparent; stroke-width: 5;" />
-    </svg>
-  </div>
+
 
 
   <script>
     const color_17 = '#9932a8'
     const color_22 = '#439abf'
+    var backgroundImages = {
+        canadianflag: "https://gistcdn.githack.com/massimocarbone/593ce62012923c2c1e146ed0a405ded3/raw/b17ccaee276477ba479519336d9c91babd3ff3f5/canada1.svg",
+        creeperanimation: "https://gistcdn.githack.com/massimocarbone/450864dac9719dd60e898c3a06373ead/raw/c7ba2a01f42868de63092d35f8bac5fa05bf76db/creeper66.svg",
+        voidmap: "https://gistcdn.githack.com/massimocarbone/118eba083cf1d0630ed22c86c9879ee2/raw/5a20fd50d9e4ad84937e2c7ff75ed9c47ed863c7/void1.svg"
+    };
+    var backgroundCount = 1;
 
     async function tileschart(data, svgId, color, category) {
 
@@ -442,33 +428,6 @@
       let legend = chart.append('g')
         .attr('class', 'legend')
         .attr("transform", "translate(" + (width - 40) + "," + 0 + ")");
-
-      let anno = chart.append('g')
-        .attr('class', 'legend')
-        .attr("transform", "translate(" + (margin.left + 275) + "," + 145 + ")");
-
-      anno.append("rect")
-        .attr("class", "anno-background")
-        .attr("x", -12)
-        .attr("y", -5)
-        .attr("width", 250)
-        .attr("height", 35)
-        .style("fill", "white")
-        .style("stroke","darkgrey")
-        .style("stroke-width","2px");
-
-      anno.append("text")
-        .style("dominant-baseline","hanging")
-        .style("font-family","sans-serif")
-        .style("font-size","8pt")
-        .text("The dataset is missing information from roughly")
-
-      anno.append("text")
-        .attr("y","15px")
-        .style("dominant-baseline","hanging")
-        .style("font-family","sans-serif")
-        .style("font-size","8pt")
-        .text("2000 minutes - 4000 minutes past the first pixel.")
 
       legend.append("rect")
         .attr("class", "legend-background")
@@ -1006,9 +965,27 @@
         .append("svg")
         .attr("width", width + 2)
         .attr("height", height + 2)
-        .attr("id", "#" + divId + "svg");
+        .attr("id", "#" + divId + "svg")
+        .attr("class", "frontimg");
 
       heatmap(data1DArray[0], svg, pixelSize, heatmap_color);
+
+      let svgBack = d3.select("#" + divId)
+        .append("svg")
+        .attr("width", width + 2)
+        .attr("height", height + 2)
+        .attr("id", "#" + divId + "back")
+        .attr("class", "backimg");
+        // potench here 
+        //edit: if we put here, problem is it fucks up p elements below so we could ask to see how to keep them pos absolute too
+      ////
+      document.getElementById("#" + divId + "back").innerHTML += 
+              "<defs> <clipPath id=mask" + backgroundCount + "> <circle id=mask-circle" + backgroundCount + " cx=50% cy=50% r=8% style=\"fill:#ffffff\"/> </clipPath> </defs>" + " <g clip-path=url(#mask"+ backgroundCount +")> <rect width=100% height=100% fill=\"#272730\" /> <image id=" + divId + "img" + " xlink:href=\"https://gistcdn.githack.com/massimocarbone/593ce62012923c2c1e146ed0a405ded3/raw/b17ccaee276477ba479519336d9c91babd3ff3f5/canada1.svg\" width=100% height=100% /> </g>" + "<circle id=circle-shadow" + backgroundCount + " cx=50% cy=50% r=8% style=\"stroke: #fff; fill: transparent; stroke-width: 5;\" />";
+
+      //document.getElementById(divId + "img").href.animVal="../template/save.png";
+      document.getElementById(divId + "img").setAttribute('xlink:href', backgroundImages[divId]);
+      backgroundCount++;
+
 
       // Credit: Slider Reference https://bl.ocks.org/johnwalley/e1d256b81e51da68f7feb632a53c3518s
       let sliderStep = d3
@@ -1097,18 +1074,17 @@
         d['min_from_zero'] = parseInt(d['min_from_zero']);
       })
 
+      let tileDataCanada = await d3.csv("data/cases/canada_time_cleaned.csv");
+      tileDataCanada.forEach(d => {
+        d['count'] = parseInt(d['count']);
+        d['min_from_zero'] = parseInt(d['min_from_zero']);
+      })
 
       tileschartmultiple(tileData2017, tileData2022, 'expo1', color_17, color_22, 2017, 2022);
       tileschart(tileData2017, 'expo2', color_17, 2017);
       tileschart(tileData2022, 'expo3', color_22, 2022);
 
-      
-      // let tileDataCanada = await d3.csv("data/cases/canada_time_cleaned.csv");
-      // tileDataCanada.forEach(d => {
-      //   d['count'] = parseInt(d['count']);
-      //   d['min_from_zero'] = parseInt(d['min_from_zero']);
-      // })
-      // tileschart(tileDataCanada, 'casecanada', color_22, 2022);
+      tileschart(tileDataCanada, 'casecanada', color_22, 2022);
 
 
       let userData2017 = await d3.csv("data/2017_user_data.csv");
@@ -1137,8 +1113,91 @@
       const voidDataArr = [csvToArray(voidData33), csvToArray(voidData66), csvToArray(voidData100)]
       heatmapOverTime(voidDataArr, 'voidmap', 3);
 
+      hoverOnCircle();
+
     }
 
+
+    // hover-over interaction adapted from example on https://greensock.com/forums/topic/24620-svg-image-magny-glass-effect/
+    function hoverOnCircle() {
+      var svgElement1 = document.getElementById("#canadianflagsvg");
+      var maskedElement1 = document.querySelector('#mask-circle1');
+      //  console.log(svgElement);
+      var circleFeedback1 = document.querySelector('#circle-shadow1');
+      var svgPoint1 = svgElement1.createSVGPoint();
+
+      var svgElement2 = document.getElementById("#creeperanimationsvg");
+      var maskedElement2 = document.querySelector('#mask-circle2');
+      //  console.log(svgElement);
+      var circleFeedback2 = document.querySelector('#circle-shadow2');
+      var svgPoint2 = svgElement2.createSVGPoint();
+
+      var svgElement3 = document.getElementById("#voidmapsvg");
+      var maskedElement3 = document.querySelector('#mask-circle3');
+      //  console.log(svgElement);
+      var circleFeedback3 = document.querySelector('#circle-shadow3');
+      var svgPoint3 = svgElement3.createSVGPoint();
+
+      function cursorPoint1(e, svg) {
+        svgPoint1.x = e.clientX;
+        svgPoint1.y = e.clientY;
+        return svgPoint1.matrixTransform(svg.getScreenCTM().inverse());
+      }
+
+      function update1(svgCoords) {
+        maskedElement1.setAttribute('cx', svgCoords.x);
+        maskedElement1.setAttribute('cy', svgCoords.y);
+        circleFeedback1.setAttribute('cx', svgCoords.x);
+        circleFeedback1.setAttribute('cy', svgCoords.y);
+      }
+
+      window.addEventListener('mousemove', function (e) {
+        update1(cursorPoint1(e, svgElement1));
+        update2(cursorPoint2(e, svgElement2));
+        update3(cursorPoint3(e, svgElement3));
+      }, false);
+
+      document.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+        var touch = e.targetTouches[0];
+        if (touch) {
+          update1(cursorPoint1(touch, svgElement1));
+          update2(cursorPoint2(e, svgElement2));
+          update3(cursorPoint3(e, svgElement3));
+        }
+      }, false);
+
+
+      function cursorPoint2(e, svg) {
+        svgPoint2.x = e.clientX;
+        svgPoint2.y = e.clientY;
+        return svgPoint2.matrixTransform(svg.getScreenCTM().inverse());
+      }
+
+      function update2(svgCoords) {
+        maskedElement2.setAttribute('cx', svgCoords.x);
+        maskedElement2.setAttribute('cy', svgCoords.y);
+        circleFeedback2.setAttribute('cx', svgCoords.x);
+        circleFeedback2.setAttribute('cy', svgCoords.y);
+      }
+
+      function cursorPoint3(e, svg) {
+        svgPoint3.x = e.clientX;
+        svgPoint3.y = e.clientY;
+        return svgPoint3.matrixTransform(svg.getScreenCTM().inverse());
+      }
+
+      function update3(svgCoords) {
+        maskedElement3.setAttribute('cx', svgCoords.x);
+        maskedElement3.setAttribute('cy', svgCoords.y);
+        circleFeedback3.setAttribute('cx', svgCoords.x);
+        circleFeedback3.setAttribute('cy', svgCoords.y);
+      }
+
+      
+
+
+    };  
 
     // for the dynamic styling on the anchor nav sidebar--
     // this must stay at the bottom of the script to work
