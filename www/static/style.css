@@ -12,10 +12,24 @@ input[type="range"] {
   width: 800px;
 }
 
+h4{
+  text-align: center;
+}
+
+.creds h4{
+  text-align: left;
+}
+
 .container {
   display: flex;
   justify-content: center;
   /* flex-direction: column; */
+}
+
+.creds{
+  display: block;
+  margin: 0 auto;
+  margin-left: 50px;
 }
 
 .col {
