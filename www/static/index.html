@@ -280,17 +280,6 @@
         .attr("stroke-width", 1)
         .attr("d", lineGen);
 
-      let circles = chart.selectAll('.ufoCircle') 
-        .data(data) //attach the data
-        .enter().append('circle') 
-        .attr('class', 'point') 
-        .attr("class", d=>d.min_from_zero)
-        .attr("class", d=>d.count)
-        .attr('r', 2) 
-        .attr("cx", function(d) { return timeScale(d.min_from_zero); })
-        .attr("cy", function(d) { return countScale(d.count); });
-
-
       let tooltipWidth = 50;
       let tooltipHeight = 30;
 
